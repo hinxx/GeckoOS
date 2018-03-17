@@ -108,7 +108,7 @@ void app_apply_patch()
 	int i;
 
 	u8 *filebuff = (u8*)sdbuffer;
-	u8 *asmbuff;
+//	u8 *asmbuff;
 
 	no_patches = filebuff[0];
 
@@ -131,7 +131,8 @@ void app_dopatch(char *filename)
 {
 	
 	FILE* fp;
-	u32 ret, pathlen;
+//	u32 ret, pathlen;
+	u32 ret;
 	u32 filesize;
 
 	DIR* pdir = opendir ("/data/gecko/patch/");
@@ -193,7 +194,8 @@ void app_copycodes(char *filename)
 	}
 	
 	FILE* fp;
-	u32 ret, pathlen;
+//	u32 ret, pathlen;
+	u32 ret;
 	u32 filesize;
 	
 	DIR* pdir = opendir ("/data/gecko/codes/");
@@ -372,17 +374,17 @@ void app_loadgameconfig(char *gameid)
 					//}
 					if (strncasecmp("codeliststart", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 13)
 					{
-						sscanf(tempgameconf + i, " = %x", &codelist);
+						sscanf(tempgameconf + i, " = %lx", (u32 *)&codelist);
 					}
 					if (strncasecmp("codelistend", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 11)
 					{
-						sscanf(tempgameconf + i, " = %x", &codelistend);
+						sscanf(tempgameconf + i, " = %lx", (u32 *)&codelistend);
 					}
 					if (strncasecmp("hooktype", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 8)
 					{
 						if (hookset == 1)
 						{
-							ret = sscanf(tempgameconf + i, " = %u", &temp);
+							ret = sscanf(tempgameconf + i, " = %lu", &temp);
 							if (ret == 1)
 								if (temp >= 0 && temp <= 7)
 									config_bytes[CFG_HOOK_TYPE] = temp;
@@ -390,12 +392,13 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("poke", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 4)
 					{
-						ret = sscanf(tempgameconf + i, "( %x , %x", &codeaddr, &codeval);
+						ret = sscanf(tempgameconf + i, "( %lx , %lx", &codeaddr, &codeval);
 						if (ret == 2)
 						{
 							*(gameconf + (gameconfsize / 4)) = 0;
 							gameconfsize += 4;
-							*(gameconf + (gameconfsize / 4)) = NULL;
+//							*(gameconf + (gameconfsize / 4)) = NULL;
+							*(gameconf + (gameconfsize / 4)) = 0;
 							gameconfsize += 8;
 							*(gameconf + (gameconfsize / 4)) = codeaddr;
 							gameconfsize += 4;
@@ -406,7 +409,7 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("pokeifequal", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 11)
 					{
-						ret = sscanf(tempgameconf + i, "( %x , %x , %x , %x", &codeaddr, &codeval, &codeaddr2, &codeval2);
+						ret = sscanf(tempgameconf + i, "( %lx , %lx , %lx , %lx", &codeaddr, &codeval, &codeaddr2, &codeval2);
 						if (ret == 4)
 						{
 							*(gameconf + (gameconfsize / 4)) = 0;
@@ -424,7 +427,7 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("searchandpoke", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 13)
 					{
-						ret = sscanf(tempgameconf + i, "( %x%n", &codeval, &tempoffset);
+						ret = sscanf(tempgameconf + i, "( %lx%n", &codeval, (int *)&tempoffset);
 						if (ret == 1)
 						{
 							gameconfsize += 4;
@@ -435,10 +438,10 @@ void app_loadgameconfig(char *gameid)
 								gameconfsize += 4;
 								temp++;
 								i += tempoffset;
-								ret = sscanf(tempgameconf + i, " %x%n", &codeval, &tempoffset);
+								ret = sscanf(tempgameconf + i, " %lx%ln", &codeval, &tempoffset);
 							}
 							*(gameconf + (gameconfsize / 4) - temp - 1) = temp;
-							ret = sscanf(tempgameconf + i, " , %x , %x , %x , %x", &codeaddr, &codeaddr2, &codeoffset, &codeval2);
+							ret = sscanf(tempgameconf + i, " , %lx , %lx , %lx , %lx", &codeaddr, &codeaddr2, &codeoffset, &codeval2);
 							if (ret == 4)
 							{
 								*(gameconf + (gameconfsize / 4)) = codeaddr;
@@ -458,7 +461,7 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("hook", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 4)
 					{
-						ret = sscanf(tempgameconf + i, "( %x %x %x %x %x %x %x %x", customhook, customhook + 1, customhook + 2, customhook + 3, customhook + 4, customhook + 5, customhook + 6, customhook + 7);
+						ret = sscanf(tempgameconf + i, "( %lx %lx %lx %lx %lx %lx %lx %lx", customhook, customhook + 1, customhook + 2, customhook + 3, customhook + 4, customhook + 5, customhook + 6, customhook + 7);
 						if (ret >= 3)
 						{
 							if (hookset != 1)
@@ -469,21 +472,21 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("002fix", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 6)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 0x1)
 								fakeiosversion = temp;
 					}
 					if (strncasecmp("switchios", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 9)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								willswitchios = temp;
 					}
 					if (strncasecmp("videomode", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 9)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 						{
 							if (temp == 0)
@@ -514,7 +517,7 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("language", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 8)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 						{
 							if (temp == 0)
@@ -533,7 +536,7 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("diagnostic", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 10)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 						{
 							if (temp == 0 || temp == 1)
@@ -542,21 +545,21 @@ void app_loadgameconfig(char *gameid)
 					}
 					if (strncasecmp("vidtv", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 5)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								vipatchon = temp;
 					}
 					if (strncasecmp("fwritepatch", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 11)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								applyfwritepatch = temp;
 					}
 					if (strncasecmp("dumpmaindol", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 11)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								dumpmaindol = temp;
@@ -566,49 +569,49 @@ void app_loadgameconfig(char *gameid)
 				{
 					if (strncasecmp("autoboot", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 8)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								autoboot = temp;
 					}
 					if (strncasecmp("autobootwait", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 12)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 255)
 								autobootwait = temp;
 					}
 					if (strncasecmp("autoboothbc", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 11)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								autoboothbc = temp;
 					}
 					if (strncasecmp("autobootocarina", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 15)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								config_bytes[CFG_OCARINA] = temp;
 					}
 					if (strncasecmp("autobootdebugger", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 16)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								config_bytes[CFG_DEBUGGER] = temp;
 					}
 					if (strncasecmp("rebootermenuitem", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 16)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
 								rebooterasmenuitem = temp;
 					}
 					if (strncasecmp("startupios", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 10)
 					{
-						ret = sscanf(tempgameconf + i, " = %u", &temp);
+						ret = sscanf(tempgameconf + i, " = %lu", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 255)
 							{
@@ -725,31 +728,31 @@ char * display_tmd_info(const tmd *t) {
 	
 	switch (kind) {
 		case 1: // IOS, MIOS, BC, System Menu
-			snprintf(desc, sizeof(desc), "Title=1-%x (", title_l);
+			snprintf(desc, sizeof(desc), "Title=1-%lx (", title_l);
 			switch(title_l) {
 				case 2:   strlcat(desc, "System Menu) ", sizeof(desc)); break;
 				case 0x100: strlcat(desc, "BC) ", sizeof(desc)); break;
 				case 0x101: strlcat(desc, "MIOS) ", sizeof(desc)); break;
-				default:  sprintf(desc + strlen(desc), "IOS%d) ", title_l); break;
+				default:  sprintf(desc + strlen(desc), "IOS%ld) ", title_l); break;
 			}
 			break;
 		case 0x10000: // TMD installed by running a disc
-			snprintf(desc, sizeof(desc), "Title=10000-%08x (savedata for '%s')", 
+			snprintf(desc, sizeof(desc), "Title=10000-%08lx (savedata for '%s')",
 					 title_l, title_ascii); break;
 		case 0x10001: // Normal channels / VC
-			snprintf(desc, sizeof(desc), "Title=10001-%08x (downloaded channel '%s')",
+			snprintf(desc, sizeof(desc), "Title=10001-%08lx (downloaded channel '%s')",
 					 title_l, title_ascii); break;
 		case 0x10002: // "System channels" -- News, Weather, etc.
-			snprintf(desc, sizeof(desc), "Title=10002-%08x (system channel '%s')", 
+			snprintf(desc, sizeof(desc), "Title=10002-%08lx (system channel '%s')",
 					 title_l, title_ascii); break;
 		case 0x10004: // "Hidden channels" -- WiiFit channel
-			snprintf(desc, sizeof(desc), "Title=10004-%08x (game channel '%s')",
+			snprintf(desc, sizeof(desc), "Title=10004-%08lx (game channel '%s')",
 					 title_l, title_ascii); break;
 		case 0x10008: // "Hidden channels" -- EULA, rgnsel
-			snprintf(desc, sizeof(desc), "Title=10008-%08x (hidden? channel '%s')", 
+			snprintf(desc, sizeof(desc), "Title=10008-%08lx (hidden? channel '%s')",
 					 title_l, title_ascii); break;
 		default:
-			printf("Unknown title type %x %08x\n", kind, title_l);
+			printf("Unknown title type %lx %08lx\n", kind, title_l);
 			break;
 	}
     
@@ -781,21 +784,21 @@ static void app_writediag(void *app_init, void *app_main, void *app_final, void 
 			fprintf(fp, "Game ID: %s\n", gameidbuffer);
 			fprintf(fp, "Required IOS: %u\n", dvdios);
 			for (i = 0; i < 12; i++)
-				fprintf(fp, "config_bytes[%u] = 0x%02X\n", i, config_bytes[i]);
-			fprintf(fp, "app_init: %x\napp_main: %x\napp_final: %x\napp_entry: %x\n\n", (u32) app_init, (u32) app_main, (u32) app_final, (u32) app_entry);
+				fprintf(fp, "config_bytes[%lu] = 0x%02X\n", i, config_bytes[i]);
+			fprintf(fp, "app_init: %lx\napp_main: %lx\napp_final: %lx\napp_entry: %lx\n\n", (u32) app_init, (u32) app_main, (u32) app_final, (u32) app_entry);
 			fprintf(fp, "Wii Titles:\n");
 			ret = ES_GetNumTitles(&count);
 			if (ret) {
-				fprintf(fp, "ES_GetNumTitles=%d, count=%08x\n", ret, count);
+				fprintf(fp, "ES_GetNumTitles=%ld, count=%08lx\n", ret, count);
 				return;
 			}
 			
-			fprintf(fp, "Found %d titles\n", count);
+			fprintf(fp, "Found %ld titles\n", count);
 			
 			static u64 title_list[256] ATTRIBUTE_ALIGN(32);
 			ret = ES_GetTitles(title_list, count);
 			if (ret) {
-				fprintf(fp, "ES_GetTitles=%d\n", ret);
+				fprintf(fp, "ES_GetTitles=%ld\n", ret);
 				return;
 			}
 			
@@ -980,7 +983,7 @@ void load_handler()
 }
 
 //---------------------------------------------------------------------------------
-u32 dvd_switchios()
+void *dvd_switchios()
 //---------------------------------------------------------------------------------
 {
 	void (*app_init)(void (*report)(const char* fmt, ...));
@@ -993,7 +996,7 @@ u32 dvd_switchios()
 	s32 ret = 0;
 	int i = 0;
 	FILE *fp = NULL;
-	void *maindolend = 0x80000000;
+	void *maindolend = (void *)0x80000000;
 	
 	app_y_screen = 115;
 
@@ -1246,7 +1249,7 @@ u32 dvd_switchios()
 		while(ret>=0 && dvddone==0);
 		DCFlushRange(dst, len);
 		
-		if (fp && dst >= 0x80000000 && dst <= 0x80dfff00)
+		if (fp && (u32)dst >= 0x80000000 && (u32)dst <= 0x80dfff00)
 			if (maindolend < (dst + len))
 				maindolend = (void *) (dst + len);
 
@@ -1353,7 +1356,7 @@ u32 dvd_switchios()
 	app_thread_state = 8;	// shut down
 
 	while(1);
-	return;
+//	return;
 }
 
 void apploader_thread_close()

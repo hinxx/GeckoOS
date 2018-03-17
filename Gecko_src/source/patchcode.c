@@ -11,6 +11,7 @@
 #include "fwrite_patch_slota.h"
 #include "main.h"
 
+// These are implemented in patchhook.S in ASM
 extern void patchhook(u32 address, u32 len);
 extern void patchhook2(u32 address, u32 len);
 extern void patchhook3(u32 address, u32 len);
@@ -159,13 +160,13 @@ const u32 langpatch[3] = {
 	0x7C600775, 0x40820010, 0x38000000
 };
 
-static const u32 oldpatch002[3] = {
-	0x2C000000, 0x40820214, 0x3C608000
-};
-
-static const u32 newpatch002[3] = {
-	0x2C000000, 0x48000214, 0x3C608000
-};
+//static const u32 oldpatch002[3] = {
+//	0x2C000000, 0x40820214, 0x3C608000
+//};
+//
+//static const u32 newpatch002[3] = {
+//	0x2C000000, 0x48000214, 0x3C608000
+//};
 
 static const u32 dczeropatch[4] = {
 	0x7C001FEC, 0x38630020, 0x4200FFF8, 0x4E800020
@@ -575,13 +576,26 @@ void determine_libogc_hook(void *addr, u32 len)
 }
 
 //---------------------------------------------------------------------------------
+void createbranch(void *addr1, void *addr2)
+//---------------------------------------------------------------------------------
+{
+	u32 blcode;
+
+	blcode = addr2 - addr1;
+	blcode &= 0x3FFFFFF;
+	blcode |= 0x48000000;
+	*(u32 *)addr1 = blcode;
+	DCFlushRange(addr1, 4);
+}
+
+//---------------------------------------------------------------------------------
 void patchgeckomenu(void *addr, u32 len, void *menuaddr)
 //---------------------------------------------------------------------------------
 {
 	
 	void *addr_start = addr;
 	void *addr_end = addr+len;
-	void *func_addr, *func_addr2;
+//	void *func_addr, *func_addr2;
 	
 	while(addr_start < addr_end)
 	{
@@ -590,17 +604,4 @@ void patchgeckomenu(void *addr, u32 len, void *menuaddr)
 		}
 		addr_start += 4;
 	}
-}
-
-//---------------------------------------------------------------------------------
-void createbranch(void *addr1, void *addr2)
-//---------------------------------------------------------------------------------
-{
-	u32 blcode;
-	
-	blcode = addr2 - addr1;
-	blcode &= 0x3FFFFFF;
-	blcode |= 0x48000000;
-	*(u32 *)addr1 = blcode;
-	DCFlushRange(addr1, 4);
 }

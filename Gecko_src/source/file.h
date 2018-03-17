@@ -17,6 +17,8 @@ struct foundfile
 //---------------------------------------------------------------------------------
 void menu_scandir();
 void file_execute(struct foundfile *list, int top, int sel);
+void menu_showdirlist(struct foundfile *list, int top, int sel);
+
 //---------------------------------------------------------------------------------
 extern int numfiles;
 extern int afiles;

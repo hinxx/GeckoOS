@@ -4,7 +4,7 @@
 #include "sd.h"
 
 //---------------------------------------------------------------------------------
-u32 dvd_switchios();
+void *dvd_switchios();
 void apploader_thread();
 void apploader_thread_close();
 void load_handler();

@@ -11,6 +11,7 @@ void gfx_drawtile(f32 xpos, f32 ypos, u16 width, u16 height, u8 data[], float de
 void gfx_draw_stars();
 void gfx_init_stars();
 void gfx_load_gfx1();
+void gfx_render_direct();
 //---------------------------------------------------------------------------------
 extern void *xfb[2];
 extern int whichfb;

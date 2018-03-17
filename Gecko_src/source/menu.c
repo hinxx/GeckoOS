@@ -630,15 +630,15 @@ static void menu_pad_tools()
 		menu_number = 0;
 	}
 
-	if((tools_menu_selected == 0 && buttonsDown & PAD_BUTTON_A) ||
-		(tools_menu_selected == 0 && WiibuttonsDown & WPAD_BUTTON_A) ||
-		(tools_menu_selected == 0 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((tools_menu_selected == 0 && (buttonsDown & PAD_BUTTON_A)) ||
+		(tools_menu_selected == 0 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+		(tools_menu_selected == 0 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		sd_refresh();
 	}
 
-	if((tools_menu_selected == 1 && buttonsDown & PAD_BUTTON_A) ||
-		(tools_menu_selected == 1 && WiibuttonsDown & WPAD_BUTTON_A) ||
-		(tools_menu_selected == 1 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((tools_menu_selected == 1 && (buttonsDown & PAD_BUTTON_A)) ||
+		(tools_menu_selected == 1 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+		(tools_menu_selected == 1 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		menu_number = 9;
 		fst_thread();	// do thread, so menu, bubbles keep running
 	}
@@ -649,7 +649,7 @@ static void menu_pad_root()
 //---------------------------------------------------------------------------------
 {
 	int i;
-	s32 ret;
+//	s32 ret;
 	
 	PAD_ScanPads();
     u32 buttonsDown = PAD_ButtonsDown(0) | PAD_ButtonsDown(1) | PAD_ButtonsDown(2) | PAD_ButtonsDown(3);
@@ -698,17 +698,17 @@ static void menu_pad_root()
 	}
 
 	// Root Actions
-	if((root_menu_selected == 0 && buttonsDown & PAD_BUTTON_A) ||
-		(root_menu_selected == 0 && WiibuttonsDown & WPAD_BUTTON_A) ||
-		(root_menu_selected == 0 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((root_menu_selected == 0 && (buttonsDown & PAD_BUTTON_A)) ||
+		(root_menu_selected == 0 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+		(root_menu_selected == 0 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		menu_number = 8;
 		apploader_thread();	// do thread, so menu, bubbles keep running
 	}
 	
 	// Launch Channel
-	if((root_menu_selected == 1 && buttonsDown & PAD_BUTTON_A) ||
-	   (root_menu_selected == 1 && WiibuttonsDown & WPAD_BUTTON_A) ||
-	   (root_menu_selected == 1 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((root_menu_selected == 1 && (buttonsDown & PAD_BUTTON_A)) ||
+	   (root_menu_selected == 1 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+	   (root_menu_selected == 1 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		if (channellist_menu_items == 0)
 		{
 			if (!menu_generatechannellist(FALSE))
@@ -724,39 +724,39 @@ static void menu_pad_root()
 	}
 	
 	// Launch Rebooter
-	if((root_menu_selected == 2 && buttonsDown & PAD_BUTTON_A) ||
-	   (root_menu_selected == 2 && WiibuttonsDown & WPAD_BUTTON_A) ||
-	   (root_menu_selected == 2 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((root_menu_selected == 2 && (buttonsDown & PAD_BUTTON_A)) ||
+	   (root_menu_selected == 2 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+	   (root_menu_selected == 2 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		rebooter_thread();
 		menu_number = 12;
 		rebooter_thread_state = 0;
 	}
 
 	// Switch to Config Menu
-	if((root_menu_selected == 3 && buttonsDown & PAD_BUTTON_A) ||
-		(root_menu_selected == 3 && WiibuttonsDown & WPAD_BUTTON_A) ||
-		(root_menu_selected == 3 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((root_menu_selected == 3 && (buttonsDown & PAD_BUTTON_A)) ||
+		(root_menu_selected == 3 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+		(root_menu_selected == 3 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		menu_number = 1;
 	}
 	
 	// Switch to Rebooter Config Menu
-	if((root_menu_selected == 4 && buttonsDown & PAD_BUTTON_A) ||
-	   (root_menu_selected == 4 && WiibuttonsDown & WPAD_BUTTON_A) ||
-	   (root_menu_selected == 4 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((root_menu_selected == 4 && (buttonsDown & PAD_BUTTON_A)) ||
+	   (root_menu_selected == 4 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+	   (root_menu_selected == 4 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		menu_number = 13;
 	}
 
 		// About
-	if((root_menu_selected == 5 && buttonsDown & PAD_BUTTON_A) ||
-		(root_menu_selected == 5 && WiibuttonsDown & WPAD_BUTTON_A) ||
-		(root_menu_selected == 5 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((root_menu_selected == 5 && (buttonsDown & PAD_BUTTON_A)) ||
+		(root_menu_selected == 5 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+		(root_menu_selected == 5 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		menu_number = 10;
 	}
 
 	// Exit
-	if((root_menu_selected == 6 && buttonsDown & PAD_BUTTON_A) ||
-		(root_menu_selected == 6 && WiibuttonsDown & WPAD_BUTTON_A) ||
-		(root_menu_selected == 6 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((root_menu_selected == 6 && (buttonsDown & PAD_BUTTON_A)) ||
+		(root_menu_selected == 6 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+		(root_menu_selected == 6 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		exitme();
 	}
 	
@@ -818,9 +818,9 @@ static void menu_pad_config()
 
 	// Config Actions
 	// Language
-	if((config_menu_selected == 0 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 0 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 0 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 0 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 0 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 0 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(langselect == 0){
 				langselect = 0;
 			}
@@ -828,9 +828,9 @@ static void menu_pad_config()
 				langselect -= 1;
 			}	
 	}
-	if((config_menu_selected == 0 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 0 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 0 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 0 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 0 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 0 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(langselect == 10){
 				langselect = 10;
 			}
@@ -840,9 +840,9 @@ static void menu_pad_config()
 	}
 
 	// Force NTSC
-	if((config_menu_selected == 1 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 1 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 1 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 1 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 1 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 1 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(ntscselect == 0){
 			ntscselect = 0;
 		}
@@ -851,9 +851,9 @@ static void menu_pad_config()
 		}	
 	}
 
-	if((config_menu_selected == 1 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 1 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 1 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 1 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 1 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 1 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(ntscselect == 1){
 			ntscselect = 1;
 		}
@@ -863,9 +863,9 @@ static void menu_pad_config()
 	}
 
 	// Force PAL60
-	if((config_menu_selected == 2 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 2 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 2 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 2 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 2 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 2 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(pal60select == 0){
 			pal60select = 0;
 		}
@@ -874,9 +874,9 @@ static void menu_pad_config()
 		}	
 	}
 
-	if((config_menu_selected == 2 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 2 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 2 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 2 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 2 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 2 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(pal60select == 1){
 			pal60select = 1;
 		}
@@ -886,9 +886,9 @@ static void menu_pad_config()
 	}
 
 	// Force PAL50
-	if((config_menu_selected == 3 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 3 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 3 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 3 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 3 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 3 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(pal50select == 0){
 			pal50select = 0;
 		}
@@ -897,9 +897,9 @@ static void menu_pad_config()
 		}	
 	}
 
-	if((config_menu_selected == 3 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 3 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 3 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 3 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 3 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 3 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(pal50select == 1){
 			pal50select = 1;
 		}
@@ -909,9 +909,9 @@ static void menu_pad_config()
 	}
 
 	// Hook Type
-	if((config_menu_selected == 4 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 4 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 4 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 4 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 4 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 4 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(hooktypeselect == 0){
 			hooktypeselect = 0;
 		}
@@ -919,9 +919,9 @@ static void menu_pad_config()
 			hooktypeselect -= 1;
 		}	
 	}
-	if((config_menu_selected == 4 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 4 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 4 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 4 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 4 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 4 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(hooktypeselect == 8){
 			hooktypeselect = 8;
 		}
@@ -930,9 +930,9 @@ static void menu_pad_config()
 		}	
 	}
 	
-	if((config_menu_selected == 5 && buttonsDown & PAD_BUTTON_LEFT) ||
-	   (config_menu_selected == 5 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-	   (config_menu_selected == 5 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 5 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+	   (config_menu_selected == 5 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+	   (config_menu_selected == 5 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(debuggerselect == 0){
 			debuggerselect = 0;
 		}
@@ -941,9 +941,9 @@ static void menu_pad_config()
 		}	
 	}
 	
-	if((config_menu_selected == 5 && buttonsDown & PAD_BUTTON_RIGHT) ||
-	   (config_menu_selected == 5 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-	   (config_menu_selected == 5 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 5 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+	   (config_menu_selected == 5 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+	   (config_menu_selected == 5 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(debuggerselect == 1){
 			debuggerselect = 1;
 		}
@@ -953,9 +953,9 @@ static void menu_pad_config()
 	}
 
 	// File Patcher on
-	if((config_menu_selected == 6 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 6 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 6 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 6 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 6 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 6 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(filepatcherselect == 0){
 			filepatcherselect = 0;
 		}
@@ -964,9 +964,9 @@ static void menu_pad_config()
 		}	
 	}
 
-	if((config_menu_selected == 6 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 6 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 6 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 6 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 6 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 6 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(filepatcherselect == 1){
 			filepatcherselect = 1;
 		}
@@ -975,9 +975,9 @@ static void menu_pad_config()
 		}	
 	}
 	// Ocarina on
-	if((config_menu_selected == 7 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 7 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 7 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 7 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 7 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 7 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(ocarinaselect == 0){
 			ocarinaselect = 0;
 		}
@@ -986,9 +986,9 @@ static void menu_pad_config()
 		}	
 	}
 
-	if((config_menu_selected == 7 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 7 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 7 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 7 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 7 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 7 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(ocarinaselect == 1){
 			ocarinaselect = 1;
 		}
@@ -998,9 +998,9 @@ static void menu_pad_config()
 	}
 
 	// Paused Start On
-	if((config_menu_selected == 8 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 8 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 8 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 8 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 8 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 8 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(pausedstartselect == 0){
 			pausedstartselect = 0;
 		}
@@ -1009,9 +1009,9 @@ static void menu_pad_config()
 		}	
 	}
 
-	if((config_menu_selected == 8 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 8 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 8 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT) ){
+	if((config_menu_selected == 8 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 8 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 8 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)) ){
 		if(pausedstartselect == 1){
 			pausedstartselect = 1;
 		}
@@ -1020,9 +1020,9 @@ static void menu_pad_config()
 		}	
 	}
 	// Paused Start On
-	if((config_menu_selected == 9 && buttonsDown & PAD_BUTTON_LEFT) ||
-		(config_menu_selected == 9 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-		(config_menu_selected == 9 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((config_menu_selected == 9 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 9 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+		(config_menu_selected == 9 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(bubbleselect == 0){
 			bubbleselect = 0;
 		}
@@ -1031,9 +1031,9 @@ static void menu_pad_config()
 		}	
 	}
 
-	if((config_menu_selected == 9 && buttonsDown & PAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 9 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-		(config_menu_selected == 9 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((config_menu_selected == 9 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 9 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+		(config_menu_selected == 9 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(bubbleselect == 1){
 			bubbleselect = 1;
 		}
@@ -1043,9 +1043,9 @@ static void menu_pad_config()
 	}
 
 	// Save config
-	if((config_menu_selected == 10 && buttonsDown & PAD_BUTTON_A) ||
-		(config_menu_selected == 10 && WiibuttonsDown & WPAD_BUTTON_A) ||
-		(config_menu_selected == 10 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_A)){
+	if((config_menu_selected == 10 && (buttonsDown & PAD_BUTTON_A)) ||
+		(config_menu_selected == 10 && (WiibuttonsDown & WPAD_BUTTON_A)) ||
+		(config_menu_selected == 10 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_A))){
 		ret = menu_process_config_flags();	// save the config bytes in mem
 		if(ret){
 			if(sd_found == 1){
@@ -1114,9 +1114,9 @@ static void menu_pad_rebooterconf()
 	
 	// Config Actions
 	
-	if((rebooterconf_menu_selected == 0 && buttonsDown & PAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 0 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 0 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((rebooterconf_menu_selected == 0 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 0 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 0 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(recoveryselect == 0){
 			recoveryselect = 0;
 		}
@@ -1125,9 +1125,9 @@ static void menu_pad_rebooterconf()
 		}	
 	}
 	
-	if((rebooterconf_menu_selected == 0 && buttonsDown & PAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 0 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 0 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((rebooterconf_menu_selected == 0 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 0 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 0 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(recoveryselect == 1){
 			recoveryselect = 1;
 		}
@@ -1136,9 +1136,9 @@ static void menu_pad_rebooterconf()
 		}	
 	}
 	
-	if((rebooterconf_menu_selected == 1 && buttonsDown & PAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 1 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 1 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((rebooterconf_menu_selected == 1 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 1 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 1 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(regionfreeselect == 0){
 			regionfreeselect = 0;
 		}
@@ -1147,9 +1147,9 @@ static void menu_pad_rebooterconf()
 		}	
 	}
 	
-	if((rebooterconf_menu_selected == 1 && buttonsDown & PAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 1 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 1 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((rebooterconf_menu_selected == 1 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 1 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 1 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(regionfreeselect == 1){
 			regionfreeselect = 1;
 		}
@@ -1158,9 +1158,9 @@ static void menu_pad_rebooterconf()
 		}	
 	}
 	
-	if((rebooterconf_menu_selected == 2 && buttonsDown & PAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 2 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 2 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((rebooterconf_menu_selected == 2 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 2 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 2 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(nocopyselect == 0){
 			nocopyselect = 0;
 		}
@@ -1169,9 +1169,9 @@ static void menu_pad_rebooterconf()
 		}	
 	}
 	
-	if((rebooterconf_menu_selected == 2 && buttonsDown & PAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 2 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 2 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((rebooterconf_menu_selected == 2 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 2 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 2 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(nocopyselect == 1){
 			nocopyselect = 1;
 		}
@@ -1181,9 +1181,9 @@ static void menu_pad_rebooterconf()
 	}
 	
 	// Hook Type
-	if((rebooterconf_menu_selected == 3 && buttonsDown & PAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 3 && WiibuttonsDown & WPAD_BUTTON_LEFT) ||
-	   (rebooterconf_menu_selected == 3 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT)){
+	if((rebooterconf_menu_selected == 3 && (buttonsDown & PAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 3 && (WiibuttonsDown & WPAD_BUTTON_LEFT)) ||
+	   (rebooterconf_menu_selected == 3 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_LEFT))){
 		if(buttonskipselect == 0){
 			buttonskipselect = 0;
 		}
@@ -1191,9 +1191,9 @@ static void menu_pad_rebooterconf()
 			buttonskipselect -= 1;
 		}	
 	}
-	if((rebooterconf_menu_selected == 3 && buttonsDown & PAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 3 && WiibuttonsDown & WPAD_BUTTON_RIGHT) ||
-	   (rebooterconf_menu_selected == 3 && WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT)){
+	if((rebooterconf_menu_selected == 3 && (buttonsDown & PAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 3 && (WiibuttonsDown & WPAD_BUTTON_RIGHT)) ||
+	   (rebooterconf_menu_selected == 3 && (WiibuttonsDown & WPAD_CLASSIC_BUTTON_RIGHT))){
 		if(buttonskipselect == 1){
 			buttonskipselect = 1;
 		}
@@ -1237,7 +1237,7 @@ static void menu_pad_channellist()
 //---------------------------------------------------------------------------------
 {
 	int i;
-	u32 ret;
+	//u32 ret;
 	
 	PAD_ScanPads();
     u32 buttonsDown = PAD_ButtonsDown(0) | PAD_ButtonsDown(1) | PAD_ButtonsDown(2) | PAD_ButtonsDown(3);
@@ -1736,10 +1736,10 @@ static void menu_drawtools()
 
 
 //---------------------------------------------------------------------------------
-static void menu_drawcheat(){
+//static void menu_drawcheat(){
 //---------------------------------------------------------------------------------
-
-}
+//
+//}
 
 //---------------------------------------------------------------------------------
 static void menu_drawextract()
@@ -2158,7 +2158,7 @@ static void menu_drawrebooter()
 static void menu_drawbootchannel()
 //---------------------------------------------------------------------------------
 {
-	s32 ret;
+//	s32 ret;
 	
 	switch (channel_thread_state)
 	{
@@ -2326,29 +2326,29 @@ static bool displaychan(u64 chantitle, u64 *title_list, u32 count)
 }
 
 //---------------------------------------------------------------------------------
-static bool displaysave(u64 chantitle, u64 *title_list, u32 count)
-//---------------------------------------------------------------------------------
-{
-	int i;
-	
-	if ((chantitle & 0xff) == 0x41)
-		for (i = 0; i < count; i++)
-			if ((chantitle & 0xffffff00) == (title_list[i] & 0xffffff00) &&
-				(title_list[i] & 0xff) != 0x41)
-				return FALSE;
-	if ((chantitle & 0xffffff00) >> 8 == 0x484141)
-		for (i = 0; i < count; i++)
-			if ((title_list[i] & 0xffffff00) >> 8 == 0x484159 &&
-				(chantitle & 0xff) == (title_list[i] & 0xff))
-				return FALSE;
-	if (TITLE_UPPER(chantitle) == 0x00010000 || TITLE_UPPER(chantitle) == 0x00010001 ||
-		TITLE_UPPER(chantitle) == 0x00010002 || TITLE_UPPER(chantitle) == 0x00010004)
-		if ((chantitle & 0xffffff00) >> 8 != 0x484142 &&
-			(chantitle & 0xffffff00) >> 8 != 0x484347 &&
-			TITLE_LOWER(chantitle) != 0x48415858)
-			return TRUE;
-	return FALSE;
-}
+//static bool displaysave(u64 chantitle, u64 *title_list, u32 count)
+////---------------------------------------------------------------------------------
+//{
+//	int i;
+//
+//	if ((chantitle & 0xff) == 0x41)
+//		for (i = 0; i < count; i++)
+//			if ((chantitle & 0xffffff00) == (title_list[i] & 0xffffff00) &&
+//				(title_list[i] & 0xff) != 0x41)
+//				return FALSE;
+//	if ((chantitle & 0xffffff00) >> 8 == 0x484141)
+//		for (i = 0; i < count; i++)
+//			if ((title_list[i] & 0xffffff00) >> 8 == 0x484159 &&
+//				(chantitle & 0xff) == (title_list[i] & 0xff))
+//				return FALSE;
+//	if (TITLE_UPPER(chantitle) == 0x00010000 || TITLE_UPPER(chantitle) == 0x00010001 ||
+//		TITLE_UPPER(chantitle) == 0x00010002 || TITLE_UPPER(chantitle) == 0x00010004)
+//		if ((chantitle & 0xffffff00) >> 8 != 0x484142 &&
+//			(chantitle & 0xffffff00) >> 8 != 0x484347 &&
+//			TITLE_LOWER(chantitle) != 0x48415858)
+//			return TRUE;
+//	return FALSE;
+//}
 
 //---------------------------------------------------------------------------------
 static char* chanidtoname(char *chanid, u64 chantitle, char *menuname, char *chandb)
@@ -2596,6 +2596,7 @@ s32 menu_generatechannellist(bool preinit)
 		s_tmd = (signed_blob *)tmd_buf;
 		ret = ES_GetStoredTMD(title_list[i], s_tmd, tmd_size);
 		bootindex = ((tmd *)SIGNATURE_PAYLOAD(s_tmd))->boot_index;
+		bootid = 0;
 		for (j = 0; j < ((tmd *)SIGNATURE_PAYLOAD(s_tmd))->num_contents; j++)
 		{
 			if (((tmd *)SIGNATURE_PAYLOAD(s_tmd))->contents[j].index == 0)
@@ -2603,7 +2604,7 @@ s32 menu_generatechannellist(bool preinit)
 			if (((tmd *)SIGNATURE_PAYLOAD(s_tmd))->contents[j].index == bootindex)
 				bootid = ((tmd *)SIGNATURE_PAYLOAD(s_tmd))->contents[j].cid;
 		}
-		snprintf(filename, 256, "/title/%08x/%08x/content/%08x.app", TITLE_UPPER(title_list[i]), TITLE_LOWER(title_list[i]), bootid);
+		snprintf(filename, 256, "/title/%08lx/%08lx/content/%08lx.app", TITLE_UPPER(title_list[i]), TITLE_LOWER(title_list[i]), bootid);
 		ret = ISFS_Open(filename, ISFS_OPEN_READ);
 		if (ret >= 0)
 		{

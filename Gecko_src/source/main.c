@@ -72,6 +72,9 @@ static __inline__ int __send_command1(s32 chn,u16 *cmd)
 	return ret;
 }
 
+/*
+ * Request USB read operation from USB Gecko (see VHDL sources).
+ */
 static int __usb_recvbyte1(s32 chn,char *ch)
 {
 	s32 ret;
@@ -80,6 +83,13 @@ static int __usb_recvbyte1(s32 chn,char *ch)
 	*ch = 0;
 	val = 0xA000;
 	ret = __send_command1(chn,&val);
+	/*
+	 * XXX: VHDL comment says it returns 0x04000000, this
+	 *      check seems to suggests it is 0x08000000?!
+	 *      Looking at the VHDL code it seems that 0x08000000
+	 *      is correct since it checks at EXICLK 3 with bits 0 .. 3
+	 *      in the buffer already (sampled EXIDO).
+	 */
 	if(ret==1 && !(val&0x0800)) ret = 0;
 	else if(ret==1) *ch = (val&0xff);
 
@@ -183,6 +193,7 @@ int main(int argc, char **argv) {
 	
 	*(u32*)0xCD00643C = 0x00000000;	// 32Mhz on Bus
 	
+	 // Check slot B for USB gecko first..
 	gecko_attached = usb_isgeckoalive(EXI_CHANNEL_1);
 	if(gecko_attached){	
 		gecko_channel = 1;
@@ -205,6 +216,7 @@ int main(int argc, char **argv) {
 	
 slota:
 	
+	 // We check slot A only if slot B check above failed.
 	gecko_attached = usb_isgeckoalive(EXI_CHANNEL_0);
 	if(gecko_attached){	
 		gecko_channel = 0;
@@ -231,6 +243,7 @@ slotb:
 	tempgameconf = (char *) sdbuffer;
 	autobootcheck = 1;
 	memset(gameidbuffer, 0, 8);
+	// Use default config or SD card saved config
 	app_loadgameconfig(gameidbuffer);
 	autobootcheck = 0;
 	
@@ -279,26 +292,42 @@ slotb:
 	
 	VIDEO_WaitVSync();
 	
-	if(!gecko_attached){	
+	if(!gecko_attached){
+		// no usb gecko connected - no debugger
+		// still provide code handler to load cheats from SD card
 		gecko_channel = 2;
 	}
 
-	gfx_int_stars();
+	gfx_init_stars();
 	
+	// this is our loop ..
 	while(1)
 	{
+		// this is the only thing that is handled here - receiving/sending
+		// data from/to USB gecko
+		// then it is the menu..
 		if(gecko_attached){
+
+			// **** for PC side look at GeckoDotNet app C# sources ****
+
+			// get a single byte from USB here, handle the rest, if any later on
 			usb_recvbuffer(gecko_channel,&gecko_command,1);
+
+			// only gecko OS relevant commands are handled, i.e. no debugger
+			// related ones.. they are managed by the code handler after gecko OS
+			// is gone and replaced with payload game
 			switch(gecko_command)
 			{
 				//case 0x04:	
 				//	gecko_readmem();	
 				//break;
 				
+				// XXX: add to imgecko
 				case 0x14:		// Load DOL
 					load_geckoexe(0);
 				break;
 					
+				// XXX: add to imgecko
 				case 0x24:		// Load DOL
 					load_geckoexe(1);
 				break;
@@ -307,6 +336,7 @@ slotb:
 					// Debugger on, pause start off
 					config_bytes[CFG_DEBUGGER] = 0x01;
 					config_bytes[CFG_PAUSED_START] = 0x00;
+					// get the remaining two bytes that PC sent, language and video mode
 					usb_recvbuffer_safe(gecko_channel,&oldconfigbytes,2);	// Get config
 					config_bytes[CFG_LANG_SEL] = oldconfigbytes[0];
 					switch (oldconfigbytes[1])
@@ -345,6 +375,7 @@ slotb:
 					// Debugger on, pause start on
 					config_bytes[CFG_DEBUGGER] = 0x01;
 					config_bytes[CFG_PAUSED_START] = 0x01;
+					// get the remaining two bytes that PC sent, language and video mode
 					usb_recvbuffer_safe(gecko_channel,&oldconfigbytes,2);	// Get config
 					config_bytes[CFG_LANG_SEL] = oldconfigbytes[0];
 					switch (oldconfigbytes[1])
@@ -379,10 +410,13 @@ slotb:
 					gecko_command = 0;
 				break;
 
-				case 0x50:		
+				case 0x50:
+					// send status of the loader/game ; 3 means we are in loader
+					// other statuses are sent from code handler
 					usb_sendbuffer_safe(gecko_channel,&gamestatus,1);
 				break;
-
+					// send version number = 0x80 for wii
+					// also available in code handler
 				case 0x99:		
 					usb_sendbuffer_safe(gecko_channel,&versionnumber,1); 
 				break;
