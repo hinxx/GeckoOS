@@ -231,104 +231,104 @@ static u32 menu_process_config_flags()
 	switch(langselect)
 	{
 		case 0:
-			config_bytes[0] = 0xCD;
+			config_bytes[CFG_LANG_SEL] = 0xCD;
 		break;
 
 		case 1:
-			config_bytes[0] = 0x00;
+			config_bytes[CFG_LANG_SEL] = 0x00;
 		break;
 
 		case 2:
-			config_bytes[0] = 0x01;
+			config_bytes[CFG_LANG_SEL] = 0x01;
 		break;
 
 		case 3:
-			config_bytes[0] = 0x02;
+			config_bytes[CFG_LANG_SEL] = 0x02;
 		break;
 
 		case 4:
-			config_bytes[0] = 0x03;
+			config_bytes[CFG_LANG_SEL] = 0x03;
 		break;
 
 		case 5:
-			config_bytes[0] = 0x04;
+			config_bytes[CFG_LANG_SEL] = 0x04;
 		break;
 
 		case 6:
-			config_bytes[0] = 0x05;
+			config_bytes[CFG_LANG_SEL] = 0x05;
 		break;
 
 		case 7:
-			config_bytes[0] = 0x06;
+			config_bytes[CFG_LANG_SEL] = 0x06;
 		break;
 
 		case 8:
-			config_bytes[0] = 0x07;
+			config_bytes[CFG_LANG_SEL] = 0x07;
 		break;
 
 		case 9:
-			config_bytes[0] = 0x08;
+			config_bytes[CFG_LANG_SEL] = 0x08;
 		break;
 		
 		case 10:
-			config_bytes[0] = 0x09;
+			config_bytes[CFG_LANG_SEL] = 0x09;
 		break;
 	}
 	
 	// Video Modes
 	if(pal60select == 0 && ntscselect == 0 && pal50select == 0){ // config[0] 0x00 (apply no patches)
-		config_bytes[1] = 0x00;
+		config_bytes[CFG_VIDEO_MODE] = 0x00;
 	}
 
 	if(pal60select == 1){			// 0x01 (Force PAL60)
-		config_bytes[1] = 0x01;
+		config_bytes[CFG_VIDEO_MODE] = 0x01;
 	}
 
 	if(pal50select == 1){			// 0x02 (Force PAL50)
-		config_bytes[1] = 0x02;
+		config_bytes[CFG_VIDEO_MODE] = 0x02;
 	}
 
 	if(ntscselect == 1){			// 0x02 (Force NTSC)
-		config_bytes[1] = 0x03;
+		config_bytes[CFG_VIDEO_MODE] = 0x03;
 	}
 	
 	// Hook Type
 	switch(hooktypeselect)
 	{
 		case 0:
-			config_bytes[2] = 0x00;	// No Hooks
+			config_bytes[CFG_HOOK_TYPE] = 0x00;	// No Hooks
 		break;
 		
 		case 1:
-			config_bytes[2] = 0x08;	// Default
+			config_bytes[CFG_HOOK_TYPE] = 0x08;	// Default
 		break;
 		
 		case 2:
-			config_bytes[2] = 0x01;	// VBI
+			config_bytes[CFG_HOOK_TYPE] = 0x01;	// VBI
 		break;
 
 		case 3:
-			config_bytes[2] = 0x02;	// KPAD Read
+			config_bytes[CFG_HOOK_TYPE] = 0x02;	// KPAD Read
 		break;
 
 		case 4:
-			config_bytes[2] = 0x03;	// Joypad Hook
+			config_bytes[CFG_HOOK_TYPE] = 0x03;	// Joypad Hook
 		break;
 
 		case 5:
-			config_bytes[2] = 0x04;	// GXDraw Hook
+			config_bytes[CFG_HOOK_TYPE] = 0x04;	// GXDraw Hook
 		break;
 
 		case 6:
-			config_bytes[2] = 0x05;	// GXFlush Hook
+			config_bytes[CFG_HOOK_TYPE] = 0x05;	// GXFlush Hook
 		break;
 
 		case 7:
-			config_bytes[2] = 0x06;	// OSSleepThread Hook
+			config_bytes[CFG_HOOK_TYPE] = 0x06;	// OSSleepThread Hook
 		break;
 
 		case 8:
-			config_bytes[2] = 0x07;	// AXNextFrame Hook
+			config_bytes[CFG_HOOK_TYPE] = 0x07;	// AXNextFrame Hook
 		break;
 	}
 
@@ -336,11 +336,11 @@ static u32 menu_process_config_flags()
 	switch(filepatcherselect)
 	{
 		case 0:
-			config_bytes[3] = 0x00;	// No file patch
+			config_bytes[CFG_FILE_PATCHER] = 0x00;	// No file patch
 		break;
 		
 		case 1:
-			config_bytes[3] = 0x01;	// File Patch
+			config_bytes[CFG_FILE_PATCHER] = 0x01;	// File Patch
 		break;
 	}
 
@@ -348,11 +348,11 @@ static u32 menu_process_config_flags()
 	switch(ocarinaselect)
 	{
 		case 0:
-			config_bytes[4] = 0x00;	// No Ocarina
+			config_bytes[CFG_OCARINA] = 0x00;	// No Ocarina
 		break;
 		
 		case 1:
-			config_bytes[4] = 0x01;	// Ocarina
+			config_bytes[CFG_OCARINA] = 0x01;	// Ocarina
 		break;
 	}
 
@@ -360,11 +360,11 @@ static u32 menu_process_config_flags()
 	switch(pausedstartselect)
 	{
 		case 0:
-			config_bytes[5] = 0x00;	// No Paused Start
+			config_bytes[CFG_PAUSED_START] = 0x00;	// No Paused Start
 		break;
 		
 		case 1:
-			config_bytes[5] = 0x01;	// Paused Start
+			config_bytes[CFG_PAUSED_START] = 0x01;	// Paused Start
 		break;
 	}
 
@@ -372,11 +372,11 @@ static u32 menu_process_config_flags()
 	switch(bubbleselect)
 	{
 		case 0:
-			config_bytes[6] = 0x00;	// No bubbles
+			config_bytes[CFG_BUBBLES] = 0x00;	// No bubbles
 		break;
 		
 		case 1:
-			config_bytes[6] = 0x01;	// Bubbles
+			config_bytes[CFG_BUBBLES] = 0x01;	// Bubbles
 		break;
 	}
 	
@@ -384,11 +384,11 @@ static u32 menu_process_config_flags()
 	switch(debuggerselect)
 	{
 		case 0:
-			config_bytes[7] = 0x00;	// No Debugger
+			config_bytes[CFG_DEBUGGER] = 0x00;	// No Debugger
 			break;
 			
 		case 1:
-			config_bytes[7] = 0x01;	// Debugger
+			config_bytes[CFG_DEBUGGER] = 0x01;	// Debugger
 			break;
 	}
 
@@ -400,44 +400,44 @@ static u32 menu_process_rebooterconf_flags()
 	switch(recoveryselect)
 	{
 		case 0:
-			config_bytes[8] = 0x00;
+			config_bytes[CFG_REBOOT_MODE] = 0x00;
 			break;
 			
 		case 1:
-			config_bytes[8] = 0x01;
+			config_bytes[CFG_REBOOT_MODE] = 0x01;
 			break;
 	}
 	
 	switch(regionfreeselect)
 	{
 		case 0:
-			config_bytes[9] = 0x00;
+			config_bytes[CFG_REGION_FREE] = 0x00;
 			break;
 			
 		case 1:
-			config_bytes[9] = 0x01;
+			config_bytes[CFG_REGION_FREE] = 0x01;
 			break;
 	}
 	
 	switch(nocopyselect)
 	{
 		case 0:
-			config_bytes[10] = 0x00;
+			config_bytes[CFG_REMOVE_COPY_FLAGS] = 0x00;
 			break;
 			
 		case 1:
-			config_bytes[10] = 0x01;
+			config_bytes[CFG_REMOVE_COPY_FLAGS] = 0x01;
 			break;
 	}
 	
 	switch(buttonskipselect)
 	{
 		case 0:
-			config_bytes[11] = 0x00;
+			config_bytes[CFG_BUTTON_SKIP] = 0x00;
 			break;
 			
 		case 1:
-			config_bytes[11] = 0x01;
+			config_bytes[CFG_BUTTON_SKIP] = 0x01;
 			break;
 	}
 	
@@ -1357,7 +1357,7 @@ void menu_load_config()
 //---------------------------------------------------------------------------------
 {
 	// load the bytes from SD
-	switch(config_bytes[0])
+	switch(config_bytes[CFG_LANG_SEL])
 	{
 		case 0xCD:
 			langselect  = 0;
@@ -1404,7 +1404,7 @@ void menu_load_config()
 		break;
 	}
 
-	switch(config_bytes[1])
+	switch(config_bytes[CFG_VIDEO_MODE])
 	{
 		case 0x00:	// apply no patches, disabled
 			pal60select = 0;
@@ -1426,7 +1426,7 @@ void menu_load_config()
 	}
 
 	// Hook Type
-	switch(config_bytes[2])
+	switch(config_bytes[CFG_HOOK_TYPE])
 	{
 		case 0x00:
 			hooktypeselect = 0;	// No Hooks
@@ -1466,7 +1466,7 @@ void menu_load_config()
 	}
 	
 	// filepatcher
-	switch(config_bytes[3])
+	switch(config_bytes[CFG_FILE_PATCHER])
 	{
 		case 0x00:
 			filepatcherselect = 0;	// No file patch
@@ -1478,7 +1478,7 @@ void menu_load_config()
 	}
 	
 	// Ocarina
-	switch(config_bytes[4])
+	switch(config_bytes[CFG_OCARINA])
 	{
 		case 0x00:
 			ocarinaselect = 0;	// No Ocarina
@@ -1490,7 +1490,7 @@ void menu_load_config()
 	}
 
 	// Paused Start
-	switch(config_bytes[5])
+	switch(config_bytes[CFG_PAUSED_START])
 	{
 		case 0x00:
 			pausedstartselect = 0;	// No Paused Start
@@ -1502,7 +1502,7 @@ void menu_load_config()
 	}
 
 	// Gecko Slot
-	switch(config_bytes[6])
+	switch(config_bytes[CFG_BUBBLES])
 	{
 		case 0x00:
 			bubbleselect = 0;	// Slot B
@@ -1514,7 +1514,7 @@ void menu_load_config()
 	}
 	
 	// Debugger
-	switch(config_bytes[7])
+	switch(config_bytes[CFG_DEBUGGER])
 	{
 		case 0x00:
 			debuggerselect = 0;	// No Debugger
@@ -1525,7 +1525,7 @@ void menu_load_config()
 			break;
 	}
 	
-	switch(config_bytes[8])
+	switch(config_bytes[CFG_REBOOT_MODE])
 	{
 		case 0x00:
 			recoveryselect = 0;
@@ -1536,7 +1536,7 @@ void menu_load_config()
 			break;
 	}
 	
-	switch(config_bytes[9])
+	switch(config_bytes[CFG_REGION_FREE])
 	{
 		case 0x00:
 			regionfreeselect = 0;
@@ -1547,7 +1547,7 @@ void menu_load_config()
 			break;
 	}
 	
-	switch(config_bytes[10])
+	switch(config_bytes[CFG_REMOVE_COPY_FLAGS])
 	{
 		case 0x00:
 			nocopyselect = 0;
@@ -1558,7 +1558,7 @@ void menu_load_config()
 			break;
 	}
 	
-	switch(config_bytes[11])
+	switch(config_bytes[CFG_BUTTON_SKIP])
 	{
 		case 0x00:
 			buttonskipselect = 0;
@@ -1862,7 +1862,7 @@ static void menu_drawapp()
 			VIDEO_Flush();
 			sdio_Deinitialize();
 			SYS_ResetSystem(SYS_SHUTDOWN,0,0);
-			if (config_bytes[2] == 0)
+			if (config_bytes[CFG_HOOK_TYPE] == 0)
 			{
 				__asm__(
 						"lis %r3, appentrypoint@h\n"
@@ -2037,14 +2037,14 @@ static void menu_drawrebooter()
 			boot_menu();
 			sdio_Shutdown();
 			SYS_ResetSystem(SYS_SHUTDOWN,0,0);
-			if (config_bytes[2] != 0x00)
+			if (config_bytes[CFG_HOOK_TYPE] != 0x00)
 			{
 				// Load Sysmenu patch handler
 				memset((void*)0x81700000,0,sysmenu_size);
 				memcpy((void*)0x81700000,sysmenu,sysmenu_size);
 				memcpy((void*)0x81700096, &codelist, 2);
 				memcpy((void*)0x8170009A, ((u8*) &codelist) + 2, 2);
-				switch(config_bytes[2])
+				switch(config_bytes[CFG_HOOK_TYPE])
 				{
 					case 0x01:
 						memcpy((void*)0x81700224,viwiihooks,12);
@@ -2084,7 +2084,7 @@ static void menu_drawrebooter()
 				}
 				DCFlushRange((void*)0x81700000,sysmenu_size);
 			}
-			if (config_bytes[2] == 0)
+			if (config_bytes[CFG_HOOK_TYPE] == 0)
 			{
 				__asm__(
 						"bl DCDisable\n"
@@ -2176,7 +2176,7 @@ static void menu_drawbootchannel()
 			
 			boot_channel();
 			SYS_ResetSystem(SYS_SHUTDOWN,0,0);
-			if (config_bytes[2] == 0)
+			if (config_bytes[CFG_HOOK_TYPE] == 0)
 			{
 				__asm__(
 						"bl DCDisable\n"

@@ -483,7 +483,7 @@ void gfx_draw_stars()
 {
 	int i;
 	
-	if(config_bytes[6] == 0x01)
+	if(config_bytes[CFG_BUBBLES] == 0x01)
 	{
 	
 	

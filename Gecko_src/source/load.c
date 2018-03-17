@@ -72,13 +72,13 @@ void load_geckoexe(u32 mode) // 0 for DOL, 1 for ELF, 2 for DOL debug, 3 for ELF
 			//memcpy((void*)0x80001800, relostub, relostub_size);
 			//DCFlushRange((void*)0x80001800, relostub_size);
 			codes_state = 0;
-			if (config_bytes[7] == 0x00)
+			if (config_bytes[CFG_DEBUGGER] == 0x00)
 				codelist = (u8 *) 0x800022A8;
 			else
 				codelist = (u8 *) 0x800028B8;
 			codelistend = (u8 *) 0x80003000;
 			//determine_libogc_hook(exe_file_location, exe_filesize - 4);
-			config_bytes[2] = 0x01;
+			config_bytes[CFG_HOOK_TYPE] = 0x01;
 			load_handler();
 			memcpy((u8*)reloc_code_location, relos, relos_size); // DOL
 			DCFlushRange((u8*)reloc_code_location, relos_size);

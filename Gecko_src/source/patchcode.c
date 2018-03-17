@@ -180,7 +180,7 @@ void dogamehooks(void *addr, u32 len)
 
 	while(addr_start < addr_end)
 	{
-		switch(config_bytes[2])
+		switch(config_bytes[CFG_HOOK_TYPE])
 		{
 		
 			case 0x00:	
@@ -389,7 +389,7 @@ void langpatcher(void *addr, u32 len)
 	while(addr_start < addr_end)
 	{
 		if(memcmp(addr_start, langpatch, sizeof(langpatch))==0) {
-			langvipatch((u32)addr_start, len, config_bytes[0]);
+			langvipatch((u32)addr_start, len, config_bytes[CFG_LANG_SEL]);
 		}
 		addr_start += 4;
 	}
@@ -421,7 +421,7 @@ void dochannelhooks(void *addr, u32 len)
 	
 	while(addr_start < addr_end)
 	{
-		switch(config_bytes[2])
+		switch(config_bytes[CFG_HOOK_TYPE])
 		{
 				
 			case 0x00:	
@@ -561,12 +561,12 @@ void determine_libogc_hook(void *addr, u32 len)
 	void *addr_start = addr;
 	void *addr_end = addr+len;
 	
-	config_bytes[2] = 0x09;
+	config_bytes[CFG_HOOK_TYPE] = 0x09;
 	
 	while(addr_start < addr_end)
 	{
 		if(memcmp(addr_start, wpadbuttonsdown2hooks, sizeof(wpadbuttonsdown2hooks))==0){
-			config_bytes[2] = 0x0A;
+			config_bytes[CFG_HOOK_TYPE] = 0x0A;
 			break;
 		}
 		

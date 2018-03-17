@@ -10,6 +10,21 @@
 #include "sd.h"
 #include "main.h"
 
+/**
+ * bit field definitions
+ * 0 language select (0..9, 0xCD)
+ * 1 video mode (0 - no patch, 1,2,3 force pal60,pal50,ntsc)
+ * 2 hook type (0 no hooks, 1 default, 2 VBI, ..)
+ * 3 file patcher (yes/no)
+ * 4 ocarina (yes/no)
+ * 5 paused start (yes/no)
+ * 6 bubbles (yes/no)
+ * 7 debugger (yes/no)
+ * 8 reboot recovery mode (yes/no)
+ * 9 region free (yes/no)
+ * 10 remove copy flags (yes/no)
+ * 11 button skip (yes/no)
+ */
 u8 config_bytes[no_config_bytes] ATTRIBUTE_ALIGN(32);
 
 void usb_flushnew(s32 chn);
@@ -114,25 +129,25 @@ u32 sd_load_config()
 	FILE *fp = NULL;
 	
 	// Set defaults, will get ovewritten if config.dat exists
-	config_bytes[0] = 0xCD;
-	config_bytes[1] = 0x00;
-	config_bytes[2] = 0x08;
-	config_bytes[3] = 0x00;
-	config_bytes[5] = 0x00;	// no paused start
-	config_bytes[6] = 0x00; // gecko slot b	
-	config_bytes[8] = 0x00;
-	config_bytes[9] = 0x00;
-	config_bytes[10] = 0x00;
-	config_bytes[11] = 0x00;
+	config_bytes[CFG_LANG_SEL] = 0xCD;
+	config_bytes[CFG_VIDEO_MODE] = 0x00;
+	config_bytes[CFG_HOOK_TYPE] = 0x08;
+	config_bytes[CFG_FILE_PATCHER] = 0x00;
+	config_bytes[CFG_PAUSED_START] = 0x00;	// no paused start
+	config_bytes[CFG_BUBBLES] = 0x00; // gecko slot b	
+	config_bytes[CFG_REBOOT_MODE] = 0x00;
+	config_bytes[CFG_REGION_FREE] = 0x00;
+	config_bytes[CFG_REMOVE_COPY_FLAGS] = 0x00;
+	config_bytes[CFG_BUTTON_SKIP] = 0x00;
 	if (gecko_attached)
 	{
-		config_bytes[4] = 0x00;
-		config_bytes[7] = 0x01;
+		config_bytes[CFG_OCARINA] = 0x00;
+		config_bytes[CFG_DEBUGGER] = 0x01;
 	}
 	else
 	{
-		config_bytes[4] = 0x01;
-		config_bytes[7] = 0x00;
+		config_bytes[CFG_OCARINA] = 0x01;
+		config_bytes[CFG_DEBUGGER] = 0x00;
 	}
 	
 	if (sd_found == 0)

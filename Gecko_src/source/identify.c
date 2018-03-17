@@ -175,7 +175,7 @@ void codehandler_rebooter()
 	codes_state = 0;
 	applyfwritepatch = 0;
 	
-	if (config_bytes[7] == 0x00)
+	if (config_bytes[CFG_DEBUGGER] == 0x00)
 		codelist = (u8 *) 0x800022A8;
 	else
 		codelist = (u8 *) 0x800028B8;
@@ -186,11 +186,11 @@ void codehandler_rebooter()
 	ret = DVDLowReset(__dvd_readidcb);
 	while(ret>=0 && dvddone==0);
 	
-	if (config_bytes[2] != 0x00)
+	if (config_bytes[CFG_HOOK_TYPE] != 0x00)
 	{
 		memset(gameidbuffer, 0, 8);
 		
-		if (config_bytes[2] == 0x08 || config_bytes[4] == 0x01)
+		if (config_bytes[CFG_HOOK_TYPE] == 0x08 || config_bytes[CFG_OCARINA] == 0x01)
 		{
 			// Clear the Game ID
 			memset((char*)0x80000000, 0, 6);
@@ -204,13 +204,13 @@ void codehandler_rebooter()
 			
 			app_loadgameconfig(gameidbuffer);
 			
-			if (config_bytes[7] == 0x00)
+			if (config_bytes[CFG_DEBUGGER] == 0x00)
 				codelist = (u8 *) 0x800022A8;
 			else
 				codelist = (u8 *) 0x800028E0;
 			codelistend = (u8 *) 0x80003000;
 			
-			if(config_bytes[4] == 0x01 && (gameidbuffer[1] != 0 || gameidbuffer[2] != 0))
+			if(config_bytes[CFG_OCARINA] == 0x01 && (gameidbuffer[1] != 0 || gameidbuffer[2] != 0))
 				app_copycodes(gameidbuffer);
 			else if (gameidbuffer[1] == 0 && gameidbuffer[2] == 0)
 				codes_state = 5;
@@ -218,7 +218,7 @@ void codehandler_rebooter()
 				codes_state = 6;
 		}
 		
-		if (config_bytes[7] == 0x00)
+		if (config_bytes[CFG_DEBUGGER] == 0x00)
 			codelist = (u8 *) 0x800022A8;
 		else
 			codelist = (u8 *) 0x800028E0;
@@ -265,21 +265,21 @@ void codehandler_channel()
 	gameidbuffer[3] = channeltoload & 0x000000ff;
 	gameidbuffer[4] = 0;
 	
-	if (config_bytes[7] == 0x00)
+	if (config_bytes[CFG_DEBUGGER] == 0x00)
 		codelist = (u8 *) 0x800022A8;
 	else
 		codelist = (u8 *) 0x800028E0;
 	codelistend = (u8 *) 0x80003000;
 	
-	if (config_bytes[2] != 0x00)
+	if (config_bytes[CFG_HOOK_TYPE] != 0x00)
 	{
-		if(config_bytes[3] == 0x01){		
+		if(config_bytes[CFG_FILE_PATCHER] == 0x01){		
 			app_dopatch(gameidbuffer);
 		}
 		
 		app_loadgameconfig(gameidbuffer);
 		
-		if(config_bytes[4] == 0x01 && (gameidbuffer[1] != 0 || gameidbuffer[2] != 0))
+		if(config_bytes[CFG_OCARINA] == 0x01 && (gameidbuffer[1] != 0 || gameidbuffer[2] != 0))
 			app_copycodes(gameidbuffer);
 		else if (gameidbuffer[1] == 0 && gameidbuffer[2] == 0)
 			codes_state = 5;
@@ -360,29 +360,29 @@ void boot_menu()
 			exitme();
 	}
 	
-	if (config_bytes[2] != 0x00) patchmenu((void*)0x8132ff80, 0x380000, 6);
+	if (config_bytes[CFG_HOOK_TYPE] != 0x00) patchmenu((void*)0x8132ff80, 0x380000, 6);
 	
 	if (IOS_GetVersion() == 249) patchmenu((void*)0x8132ff80, 0x380000, 7);
 	
 	// Patches
-	if(config_bytes[8] == 0x01){
+	if(config_bytes[CFG_REBOOT_MODE] == 0x01){
 		patchmenu((void*)0x8132ff80, 0x380000, 0);	// menu size
 		return;
 	}
 	// Region Free
-	if(config_bytes[9] == 0x01){
+	if(config_bytes[CFG_REGION_FREE] == 0x01){
 		patchmenu((void*)0x8132ff80, 0x380000, 2);	
 	}
 	// Health check
-	if(config_bytes[11] == 0x01){
+	if(config_bytes[CFG_BUTTON_SKIP] == 0x01){
 		patchmenu((void*)0x8132ff80, 0x380000, 3);
 	}
 	// No copy bit remove
-	if(config_bytes[10] == 0x01){
+	if(config_bytes[CFG_REMOVE_COPY_FLAGS] == 0x01){
 		patchmenu((void*)0x8132ff80, 0x380000, 4);
 	}
 	
-	if (config_bytes[2] != 0x00) patchmenu((void*)0x8132ff80, 0x380000, 1);
+	if (config_bytes[CFG_HOOK_TYPE] != 0x00) patchmenu((void*)0x8132ff80, 0x380000, 1);
 	
 	// move dvd channel
 	patchmenu((void*)0x8132ff80, 0x380000, 5);
@@ -417,14 +417,14 @@ void boot_channel()
 	*(u16*)0x80003188 = channelios;
 	*(u16*)0x8000318A = 0xFFFF;
 	
-	if (config_bytes[2] != 0x00)
+	if (config_bytes[CFG_HOOK_TYPE] != 0x00)
 	{
 		load_handler();
 		memcpy((void *)0x80001800, gameidbuffer, 8);
 		DCFlushRange((void *)0x80001800, 8);
 		app_pokevalues();
 		
-		if(config_bytes[3] == 0x01){		
+		if(config_bytes[CFG_FILE_PATCHER] == 0x01){		
 			app_apply_patch();
 		}
 		

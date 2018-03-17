@@ -186,7 +186,7 @@ void app_copycodes(char *filename)
 //---------------------------------------------------------------------------------
 {
 	
-	if (config_bytes[2] == 0x00)
+	if (config_bytes[CFG_HOOK_TYPE] == 0x00)
 	{
 		codes_state = 3;
 		return;
@@ -261,7 +261,7 @@ void app_loadgameconfig(char *gameid)
 	u32 temp, tempoffset, hookset = 0;
 	char parsebuffer[18];
 	
-	if (config_bytes[2] == 8)
+	if (config_bytes[CFG_HOOK_TYPE] == 8)
 		hookset = 1;
 	
 	memcpy(tempgameconf, defaultgameconfig, defaultgameconfig_size);
@@ -385,7 +385,7 @@ void app_loadgameconfig(char *gameid)
 							ret = sscanf(tempgameconf + i, " = %u", &temp);
 							if (ret == 1)
 								if (temp >= 0 && temp <= 7)
-									config_bytes[2] = temp;
+									config_bytes[CFG_HOOK_TYPE] = temp;
 						}
 					}
 					if (strncasecmp("poke", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 4)
@@ -463,7 +463,7 @@ void app_loadgameconfig(char *gameid)
 						{
 							if (hookset != 1)
 								configwarn |= 4;
-							config_bytes[2] = 0x08;
+							config_bytes[CFG_HOOK_TYPE] = 0x08;
 							customhooksize = ret * 4;
 						}
 					}
@@ -488,27 +488,27 @@ void app_loadgameconfig(char *gameid)
 						{
 							if (temp == 0)
 							{
-								if (config_bytes[1] != 0x00)
+								if (config_bytes[CFG_VIDEO_MODE] != 0x00)
 									configwarn |= 1;
-								config_bytes[1] = 0x00;
+								config_bytes[CFG_VIDEO_MODE] = 0x00;
 							}
 							else if (temp == 1)
 							{
-								if (config_bytes[1] != 0x03)
+								if (config_bytes[CFG_VIDEO_MODE] != 0x03)
 									configwarn |= 1;
-								config_bytes[1] = 0x03;
+								config_bytes[CFG_VIDEO_MODE] = 0x03;
 							}
 							else if (temp == 2)
 							{
-								if (config_bytes[1] != 0x01)
+								if (config_bytes[CFG_VIDEO_MODE] != 0x01)
 									configwarn |= 1;
-								config_bytes[1] = 0x01;
+								config_bytes[CFG_VIDEO_MODE] = 0x01;
 							}
 							else if (temp == 3)
 							{
-								if (config_bytes[1] != 0x02)
+								if (config_bytes[CFG_VIDEO_MODE] != 0x02)
 									configwarn |= 1;
-								config_bytes[1] = 0x02;
+								config_bytes[CFG_VIDEO_MODE] = 0x02;
 							}
 						}
 					}
@@ -519,15 +519,15 @@ void app_loadgameconfig(char *gameid)
 						{
 							if (temp == 0)
 							{
-								if (config_bytes[0] != 0xCD)
+								if (config_bytes[CFG_LANG_SEL] != 0xCD)
 									configwarn |= 2;
-								config_bytes[0] = 0xCD;
+								config_bytes[CFG_LANG_SEL] = 0xCD;
 							}
 							else if (temp > 0 && temp <= 10)
 							{
-								if (config_bytes[0] != temp-1)
+								if (config_bytes[CFG_LANG_SEL] != temp-1)
 									configwarn |= 2;
-								config_bytes[0] = temp-1;
+								config_bytes[CFG_LANG_SEL] = temp-1;
 							}
 						}
 					}
@@ -590,14 +590,14 @@ void app_loadgameconfig(char *gameid)
 						ret = sscanf(tempgameconf + i, " = %u", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
-								config_bytes[4] = temp;
+								config_bytes[CFG_OCARINA] = temp;
 					}
 					if (strncasecmp("autobootdebugger", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 16)
 					{
 						ret = sscanf(tempgameconf + i, " = %u", &temp);
 						if (ret == 1)
 							if (temp >= 0 && temp <= 1)
-								config_bytes[7] = temp;
+								config_bytes[CFG_DEBUGGER] = temp;
 					}
 					if (strncasecmp("rebootermenuitem", parsebuffer, strlen(parsebuffer)) == 0 && strlen(parsebuffer) == 16)
 					{
@@ -841,7 +841,7 @@ void set_default_vidmode()
 void process_config_vidmode()
 //---------------------------------------------------------------------------------
 {
-	switch(config_bytes[1])
+	switch(config_bytes[CFG_VIDEO_MODE])
 	{
 		case 0x00:						// default (no change)
 		break;
@@ -869,16 +869,16 @@ void process_config_vidmode()
 void load_handler()
 //---------------------------------------------------------------------------------
 {
-	if (config_bytes[2] != 0x00)
+	if (config_bytes[CFG_HOOK_TYPE] != 0x00)
 	{
-		if (config_bytes[7] == 0x01)
+		if (config_bytes[CFG_DEBUGGER] == 0x01)
 		{
 			switch(gecko_channel)
 			{
 				case 0: // Slot A
 					memset((void*)0x80001800,0,codehandlerslota_size);
 					memcpy((void*)0x80001800,codehandlerslota,codehandlerslota_size);
-					if (config_bytes[5] == 0x01)
+					if (config_bytes[CFG_PAUSED_START] == 0x01)
 						*(u32*)0x80002774 = 1;
 					memcpy((void*)0x80001CDE, &codelist, 2);
 					memcpy((void*)0x80001CE2, ((u8*) &codelist) + 2, 2);
@@ -890,7 +890,7 @@ void load_handler()
 				case 1:	// slot B
 					memset((void*)0x80001800,0,codehandler_size);
 					memcpy((void*)0x80001800,codehandler,codehandler_size);
-					if (config_bytes[5] == 0x01)
+					if (config_bytes[CFG_PAUSED_START] == 0x01)
 						*(u32*)0x80002774 = 1;
 					memcpy((void*)0x80001CDE, &codelist, 2);
 					memcpy((void*)0x80001CE2, ((u8*) &codelist) + 2, 2);
@@ -902,7 +902,7 @@ void load_handler()
 				case 2:
 					memset((void*)0x80001800,0,codehandler_size);
 					memcpy((void*)0x80001800,codehandler,codehandler_size);
-					if (config_bytes[5] == 0x01)
+					if (config_bytes[CFG_PAUSED_START] == 0x01)
 						*(u32*)0x80002774 = 1;
 					memcpy((void*)0x80001CDE, &codelist, 2);
 					memcpy((void*)0x80001CE2, ((u8*) &codelist) + 2, 2);
@@ -924,7 +924,7 @@ void load_handler()
 		memset((void*)0x80001000,0,multidol_size);
 		memcpy((void*)0x80001000,multidol,multidol_size); 
 		DCFlushRange((void*)0x80001000,multidol_size);
-		switch(config_bytes[2])
+		switch(config_bytes[CFG_HOOK_TYPE])
 		{
 			case 0x01:
 				memcpy((void*)0x8000119C,viwiihooks,12);
@@ -1072,20 +1072,20 @@ u32 dvd_switchios()
 	applyfwritepatch = 0;
 	dumpmaindol = 0;
 	
-	if (config_bytes[7] == 0x00)
+	if (config_bytes[CFG_DEBUGGER] == 0x00)
 		codelist = (u8 *) 0x800022A8;
 	else
 		codelist = (u8 *) 0x800028B8;
 	
 	// Need to load patch to high mem but not apply
-	if(sd_found == 1 && config_bytes[3] == 0x01){		
+	if(sd_found == 1 && config_bytes[CFG_FILE_PATCHER] == 0x01){		
 		app_dopatch(gameidbuffer);
 	}
 	
 	app_loadgameconfig(gameidbuffer);
 	
 	// Need to load codes to high mem but not apply
-	if(sd_found == 1 && config_bytes[4] == 0x01){
+	if(sd_found == 1 && config_bytes[CFG_OCARINA] == 0x01){
 		app_copycodes(gameidbuffer);
 	}
 	
@@ -1261,12 +1261,12 @@ u32 dvd_switchios()
 		}
 		
 		// Language
-		if(config_bytes[0] != 0xCD){
+		if(config_bytes[CFG_LANG_SEL] != 0xCD){
 			langpatcher(dst,len);
 		}
 		
 		// Hooks
-		if(config_bytes[2] != 0x00){
+		if(config_bytes[CFG_HOOK_TYPE] != 0x00){
 			dogamehooks(dst,len);
 		}
 
@@ -1277,7 +1277,7 @@ u32 dvd_switchios()
 	app_pokevalues();
 
 	// Do SD patch if sd card and enabled
-	if(sd_found == 1 &&config_bytes[3] == 0x01){		
+	if(sd_found == 1 &&config_bytes[CFG_FILE_PATCHER] == 0x01){		
 		app_apply_patch();
 	}
 	
@@ -1313,7 +1313,7 @@ u32 dvd_switchios()
 	if(rmode->viTVMode&VI_NON_INTERLACE) VIDEO_WaitVSync();
 
 	// process paused start
-/*	switch(config_bytes[5])
+/*	switch(config_bytes[CFG_PAUSED_START])
 	{
 		case 0x00:						// No paused start (no change)
 		break;

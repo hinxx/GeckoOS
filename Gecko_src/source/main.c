@@ -305,35 +305,35 @@ slotb:
 
 				case 0x42:
 					// Debugger on, pause start off
-					config_bytes[7] = 0x01;
-					config_bytes[5] = 0x00;
+					config_bytes[CFG_DEBUGGER] = 0x01;
+					config_bytes[CFG_PAUSED_START] = 0x00;
 					usb_recvbuffer_safe(gecko_channel,&oldconfigbytes,2);	// Get config
-					config_bytes[0] = oldconfigbytes[0];
+					config_bytes[CFG_LANG_SEL] = oldconfigbytes[0];
 					switch (oldconfigbytes[1])
 					{
 					case 0x00:
-						config_bytes[1] = 0x00;
+						config_bytes[CFG_VIDEO_MODE] = 0x00;
 						break;
 					case 0x01:
-						config_bytes[1] = 0x01;
+						config_bytes[CFG_VIDEO_MODE] = 0x01;
 						break;
 					case 0x02:
-						config_bytes[1] = 0x00;
+						config_bytes[CFG_VIDEO_MODE] = 0x00;
 						break;
 					case 0x03:
-						config_bytes[1] = 0x01;
+						config_bytes[CFG_VIDEO_MODE] = 0x01;
 						break;
 					case 0x04:
-						config_bytes[1] = 0x03;
+						config_bytes[CFG_VIDEO_MODE] = 0x03;
 						break;
 					case 0x05:
-						config_bytes[1] = 0x03;
+						config_bytes[CFG_VIDEO_MODE] = 0x03;
 						break;
 					case 0x06:
-						config_bytes[1] = 0x02;
+						config_bytes[CFG_VIDEO_MODE] = 0x02;
 						break;
 					case 0x07:
-						config_bytes[1] = 0x02;
+						config_bytes[CFG_VIDEO_MODE] = 0x02;
 						break;
 					}
 					menu_number = 8;
@@ -343,35 +343,35 @@ slotb:
 					
 				case 0x43:
 					// Debugger on, pause start on
-					config_bytes[7] = 0x01;
-					config_bytes[5] = 0x01;
+					config_bytes[CFG_DEBUGGER] = 0x01;
+					config_bytes[CFG_PAUSED_START] = 0x01;
 					usb_recvbuffer_safe(gecko_channel,&oldconfigbytes,2);	// Get config
-					config_bytes[0] = oldconfigbytes[0];
+					config_bytes[CFG_LANG_SEL] = oldconfigbytes[0];
 					switch (oldconfigbytes[1])
 					{
 						case 0x00:
-							config_bytes[1] = 0x00;
+							config_bytes[CFG_VIDEO_MODE] = 0x00;
 							break;
 						case 0x01:
-							config_bytes[1] = 0x01;
+							config_bytes[CFG_VIDEO_MODE] = 0x01;
 							break;
 						case 0x02:
-							config_bytes[1] = 0x00;
+							config_bytes[CFG_VIDEO_MODE] = 0x00;
 							break;
 						case 0x03:
-							config_bytes[1] = 0x01;
+							config_bytes[CFG_VIDEO_MODE] = 0x01;
 							break;
 						case 0x04:
-							config_bytes[1] = 0x03;
+							config_bytes[CFG_VIDEO_MODE] = 0x03;
 							break;
 						case 0x05:
-							config_bytes[1] = 0x03;
+							config_bytes[CFG_VIDEO_MODE] = 0x03;
 							break;
 						case 0x06:
-							config_bytes[1] = 0x02;
+							config_bytes[CFG_VIDEO_MODE] = 0x02;
 							break;
 						case 0x07:
-							config_bytes[1] = 0x02;
+							config_bytes[CFG_VIDEO_MODE] = 0x02;
 							break;
 					}
 					menu_number = 8;
