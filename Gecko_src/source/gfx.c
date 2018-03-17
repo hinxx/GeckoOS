@@ -9,12 +9,13 @@
 #include <unistd.h>
 #include <sys/dir.h>
 
+#include <pngu.h>
+
 #include "gfx/gosscreen1.h"
 #include "gfx/dejfont.h"
 #include "gfx/bubble.h"
 #include "gfx.h"
 #include "tools.h"
-#include "libpng/pngu/pngu.h"
 #include "sd.h"
 #include "main.h"
 
@@ -301,11 +302,12 @@ unsigned char* gfx_load_texture(const unsigned char my_png[])
    PNGUPROP imgProp;
    IMGCTX ctx;
    void *my_texture;
+   int dstWidth = 0, dstHeight = 0;
 
    	ctx = PNGU_SelectImageFromBuffer(my_png);
     PNGU_GetImageProperties (ctx, &imgProp);
     my_texture = memalign (32, imgProp.imgWidth * imgProp.imgHeight * 4);
-    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture, 255);
+    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, &dstWidth, &dstHeight, my_texture);
     PNGU_ReleaseImageContext (ctx);
     DCFlushRange (my_texture, imgProp.imgWidth * imgProp.imgHeight * 4);
 	return my_texture;
