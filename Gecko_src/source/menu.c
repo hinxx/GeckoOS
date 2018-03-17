@@ -57,7 +57,7 @@ u32 error_video = 0;
 int help_menu_selected = 0;
 typedef struct{char *hitems; int selected;} helpitems;
 helpitems helpmenu[]=
-	{{"Gecko 1.9.3.1",0}};
+	{{"Gecko 1.9.3.2",0}};
 
 // Root Menu
 #define root_menu_items 7

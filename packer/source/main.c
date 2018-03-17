@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	
 	memcpy((unsigned char*)reloc_code_location, relos, relos_size);	// relocate DOL loader
 	DCFlushRange((unsigned char*)reloc_code_location, relos_size);
-	void (*exe_entry)(void*) = reloc_code_location;
+	void (*exe_entry)(void*) = (void *)reloc_code_location;
 	exe_entry((void*)binarybuffer);	// disables IRQ and relocates from very high
 	return 0;
 
