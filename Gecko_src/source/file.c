@@ -93,10 +93,10 @@ void menu_scandir()
 	char filename[MAXPATHLEN];
 	char tempfilename[MAXPATHLEN];
 
-	DIR_ITER *pdir;
+	DIR *dir;
 	struct stat fstat;
 
-	pdir=diropen("/files");
+	dir=opendir("/files");
 
 	if( filelist == NULL )
 	{
@@ -107,12 +107,17 @@ void menu_scandir()
 
 	numfiles = 0;
 	idcount = 0;
+	struct dirent *dit;
 
-	while( dirnext(pdir, filename, &fstat ) == 0 )
+//	while( readdir(pdir, filename, &fstat ) == 0 )
+	while ((dit = readdir(dir)) != NULL)
 	{
-		
 		// if directory then continue
-		if( fstat.st_mode & S_IFDIR ){
+//		if( fstat.st_mode & S_IFDIR ){
+		if(strncmp(dit->d_name, ".", 1) != 0 && strncmp(dit->d_name, "..", 2) != 0) {
+			continue;
+		}
+		if (stat(dit->d_name, &fstat)) {
 			continue;
 		}
 
@@ -128,7 +133,7 @@ void menu_scandir()
 
 		int i = strlen(tempfilename);	// get length of files
 		
-		if(stricmp(&tempfilename[i-4], ".dol") == 0)
+		if(strncasecmp(&tempfilename[i-4], ".dol", 4) == 0)
 		{
 			filelist[numfiles].name[MAXPATHLEN-1] = 0;
 			strncpy(filelist[numfiles].showname, tempfilename, 40 );
@@ -140,7 +145,7 @@ void menu_scandir()
 			numfiles++;
 		}
 
-		if(stricmp(&tempfilename[i-4], ".elf") == 0)
+		if(strncasecmp(&tempfilename[i-4], ".elf", 4) == 0)
 		{
 			filelist[numfiles].name[MAXPATHLEN-1] = 0;
 			strncpy(filelist[numfiles].showname, tempfilename, 40 );
@@ -152,7 +157,7 @@ void menu_scandir()
 			numfiles++;
 		}
 
-		if(stricmp(&tempfilename[i-4], ".wad") == 0)
+		if(strncasecmp(&tempfilename[i-4], ".wad", 4) == 0)
 		{
 			filelist[numfiles].name[MAXPATHLEN-1] = 0;
 			strncpy(filelist[numfiles].showname, tempfilename, 40 );
@@ -164,7 +169,7 @@ void menu_scandir()
 			numfiles++;
 		}
 
-		if(stricmp(&tempfilename[i-4], ".mp3") == 0)
+		if(strncasecmp(&tempfilename[i-4], ".mp3", 4) == 0)
 		{
 			filelist[numfiles].name[MAXPATHLEN-1] = 0;
 			strncpy(filelist[numfiles].showname, tempfilename, 40 );
@@ -176,5 +181,5 @@ void menu_scandir()
 			numfiles++;
 		}
 	}
-	dirclose( pdir );
+	closedir( dir );
 }

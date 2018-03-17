@@ -28,5 +28,24 @@ extern u8 loaderhbc;
 extern u8 startupiosloaded;
 extern u8 progmode;
 //---------------------------------------------------------------------------------
+// HK: useful but need to move somewhere else..
+enum {
+	CFG_LANG_SEL = 0,
+	CFG_VIDEO_MODE,
+	CFG_HOOK_TYPE,
+	CFG_FILE_PATCHER,
+	CFG_OCARINA,
+	CFG_PAUSED_START,
+	CFG_BUBBLES,
+	CFG_DEBUGGER,
+	CFG_REBOOT_MODE,
+	CFG_REGION_FREE,
+	CFG_REMOVE_COPY_FLAGS,
+	CFG_BUTTON_SKIP,
+
+	CFG_LAST
+};
+
+//---------------------------------------------------------------------------------
 #endif 
 //---------------------------------------------------------------------------------

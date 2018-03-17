@@ -2,6 +2,9 @@
 #define _FILE_H_
 #include <gccore.h>
 
+/* HK: from iso9660.h */
+#define MAXPATHLEN		128
+
 //---------------------------------------------------------------------------------
 struct foundfile
 {
