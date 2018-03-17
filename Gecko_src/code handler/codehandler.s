@@ -1,82 +1,78 @@
 .text
 
-.set r0,0;   .set r1,1;   .set r2,2; .set r3,3;   .set r4,4
+.set r0,0;   .set r1,1;   .set r2,2;   .set r3,3;   .set r4,4
 .set r5,5;   .set r6,6;   .set r7,7;   .set r8,8;   .set r9,9
 .set r10,10; .set r11,11; .set r12,12; .set r13,13; .set r14,14
 .set r15,15; .set r16,16; .set r17,17; .set r18,18; .set r19,19
 .set r20,20; .set r21,21; .set r22,22; .set r23,23; .set r24,24
 .set r25,25; .set r26,26; .set r27,27; .set r28,28; .set r29,29
-.set r30,30; .set r31,31; .set f0,0; .set f2,2; .set f3,3
-         
+.set r30,30; .set r31,31; .set f0,0;   .set f2,2;   .set f3,3
+
 .globl _start
 
 gameid:
-.long	0,0
+.long 0, 0
 cheatdata:
-.long	frozenvalue
+.long frozenvalue
 .space 39*4
 
 _start:
-	stwu	r1,-168(r1)		# stores sp
-	stw	r0,8(r1)		# stores r0
+        stwu       r1,-168(r1)              # stores sp
+        stw        r0,8(r1)                 # stores r0
 
-	mflr	r0
-	stw	r0,172(r1)		# stores lr
+        mflr       r0
+        stw        r0,172(r1)               # stores lr
 
-	mfcr	r0
-	stw	r0,12(r1)		# stores cr
+        mfcr       r0
+        stw        r0,12(r1)                # stores cr
 
-	mfctr	r0
-	stw	r0,16(r1)		# stores ctr
+        mfctr      r0
+        stw        r0,16(r1)                # stores ctr
 
-	mfxer	r0
-	stw	r0,20(r1)		# stores xer
+        mfxer      r0
+        stw        r0,20(r1)                # stores xer
 
-	stmw	r3,24(r1)		# saves r3-r31
+        stmw       r3,24(r1)                # saves r3-r31
 
-	mfmsr	r25
-	ori	r26,r25,0x2000		#enable floating point ?
-	andi.	r26,r26,0xF9FF
-	mtmsr	r26
+        mfmsr      r25
+        ori        r26,r25,0x2000           # enable floating point ?
+        andi.      r26,r26,0xF9FF
+        mtmsr      r26
 
+        stfd       f2,152(r1)               # stores f2
+        stfd       f3,160(r1)               # stores f3
 
-	stfd	f2,152(r1)		# stores f2
-	stfd	f3,160(r1)		# stores f3
+        lis        r31,_start@h             # 0x8000
 
+        lis        r20,0xCC00
+        lhz        r28,0x4010(r20)
+        ori        r21,r28,0xFF
+        sth        r21,0x4010(r20)          # disable MP3 memory protection
 
-
-        lis	r31,_start@h		#0x8000
-        
-    lis r20, 0xCC00
-    lhz r28, 0x4010(r20)
-    ori r21, r28, 0xFF
-    sth r21, 0x4010(r20) # disable MP3 memory protection
-
-	bl	_codehandler
+        bl        _codehandler
 
 _setvalues:
-	#lis	r31,_start@h		#0x8000
-	li	r21,0
-	li	r22,0x19
-	li	r23,0xD0
-	lis	r24,0xCD00
+        #lis       r31,_start@h             # 0x8000
+        li         r21,0
+        li         r22,0x19
+        li         r23,0xD0
+        lis        r24,0xCD00
 
-	ori	r18, r31, frozenvalue@l	# read buffer just store in lowmem
-	lwz	r0,172(r1)		# loads lr
-	stw	r0,4(r18)		# stores lr
-    stw r21, 0x643C(r24)		# exi speed up
+        ori        r18,r31,frozenvalue@l    # read buffer just store in lowmem
+        lwz        r0,172(r1)               # loads lr
+        stw        r0,4(r18)                # stores lr
+        stw        r21,0x643C(r24)          # exi speed up
 
 frozen:
-        bl	exireceivebyte
-        beq	finish			# r3 returns 1 or 0, one for byte received ok
+        bl         exireceivebyte
+        beq        finish                   # r3 returns 1 or 0, one for byte received ok
 
 checkcommand:
-
-	cmpwi	   r29, 0x04		# checks lf 8/1/32 bits write command
-	bge	   _nextcommand
+        cmpwi      r29, 0x04                # checks lf 8/1/32 bits write command
+        bge        _nextcommand
         cmpwi      r29, 0x01
-	blt	   finish
-        b          writedword		#write value to address
+        blt        finish
+        b          writedword               # write value to address
 _nextcommand:
         beq        readmem
         cmpwi        r29, 0x06
@@ -86,29 +82,29 @@ _nextcommand:
         cmpwi        r29, 0x08
         beq        resumegame
         cmpwi        r29, 0x09
-        beq        breakpoints #ibp
+        beq        breakpoints              # ibp
         cmpwi        r29, 0x10
-        beq        breakpoints #dbp
+        beq        breakpoints              # dbp
         cmpwi        r29, 0x2F
         beq        upbpdata
         cmpwi        r29, 0x30
         beq        getbpdata
         cmpwi        r29, 0x38
-        beq       cancelbreakpoints
+        beq        cancelbreakpoints
         cmpwi        r29, 0x40
         beq        sendcheats
         cmpwi        r29, 0x41
         beq        uploadcode
-	cmpwi	     r29, 0x44
-	beq	   breakpoints #step
+        cmpwi        r29, 0x44
+        beq        breakpoints              # step
         cmpwi        r29, 0x50
         beq        pausestatus
         cmpwi        r29, 0x60
         beq        executecodes
         cmpwi        r29, 0x89
-        beq        breakpoints #aligned dbp
-	cmpwi        r29, 0x99
-	beq	   versionnumber
+        beq        breakpoints              # aligned dbp
+        cmpwi        r29, 0x99
+        beq        versionnumber
         b          finish
 
 #***************************************************************************
@@ -117,10 +113,9 @@ _nextcommand:
 #***************************************************************************
 
 pausestatus:
-	lwz	r3,0(18)
-	bl	exisendbyte
-	b	finish
-
+        lwz        r3,0(r18)
+        bl         exisendbyte
+        b          finish
 
 #***************************************************************************
 #                        subroutine: executecodes:
@@ -150,7 +145,7 @@ freezegame:
 upbpdata:
 	bl	exisendbyteAA
 
-	li	r16, 40*4		# 42 "registers rN" * 4             
+	li	r16, 40*4		# 42 "registers rN" * 4
 	ori	r12, r31, regbuffer@l
 	b	upload
 
@@ -160,7 +155,7 @@ upbpdata:
 #***************************************************************************
 
 getbpdata:
-	li	r3, 72*4		# register buffer            
+	li	r3, 72*4		# register buffer
 	ori	r12, r31, regbuffer@l
 	bl	exisendbuffer		# send it, less than a packet
 	b	finish
@@ -173,70 +168,70 @@ getbpdata:
 
 breakpoints:
 
-	cmpwi	cr6,r29,0x10		# 0x10 = instruction, 0x09/0x89 = data
-	cmpwi	cr5,r29,0x44		# 0x44 = step
+        cmpwi      cr6,r29,0x10             # 0x10 = instruction, 0x09/0x89 = data
+        cmpwi      cr5,r29,0x44             # 0x44 = step
 
-	ori	r4,r31,bphandler@l	#used for writebranch (= source address)
+        ori        r4,r31,bphandler@l       # used for writebranch (= source address)
 
-	lis	r3,0x8000
-	ori	r3,r3,0x300		# bprw  0x80000300
-	bl	writebranch
+        lis        r3,0x8000
+        ori        r3,r3,0x300              # bprw  0x80000300
+        bl         writebranch
 
-	addi	r3,r3,0xA00		# trace 0x80000D00
-	bl	writebranch
+        addi       r3,r3,0xA00              # trace 0x80000D00
+        bl         writebranch
 
-	addi	r3,r3,0x600		# bpx   0x80001300
-	bl	writebranch
+        addi       r3,r3,0x600              # bpx   0x80001300
+        bl         writebranch
 
-	ori	r12, r31, bpbuffer@l	# read buffer just store in lowmem
+        ori        r12,r31,bpbuffer@l       # read buffer just store in lowmem
 
-	stw	r21,0(r12)		# clears inst bp
-	stw	r21,4(r12)		# clears data bp
-	stw	r21,8(r12)		# clears alignement
+        stw        r21,0(r12)               # clears inst bp
+        stw        r21,4(r12)               # clears data bp
+        stw        r21,8(r12)               # clears alignement
 
-	ori	r4, r31, regbuffer@l
-	lwz	r9,0x18(r4)
+        ori        r4,r31,regbuffer@l
+        lwz        r9,0x18(r4)
 
-	lwz	r3,0(r18)
-	cmpwi	r3,2			# checks lf the gecko is on a breakpoint
-	bne	+12
-	beq	cr5,+12
-	b	bp
-	li	r3,0
-	stw	r3,12(r12)		# lf not, clears the previous "broken on" address
+        lwz        r3,0(r18)
+        cmpwi      r3,2                     # checks lf the gecko is on a breakpoint
+        bne        +12
+        beq        cr5,+12
+        b          bp
+        li         r3,0
+        stw        r3,12(r12)               # lf not, clears the previous "broken on" address
 
-	bne	bp
+        bne        bp
 
-	bne	cr5,bp
-	ori	r9,r9,0x400
-	stw	r9,0x18(r4)
-	b	unfreezegame
+        bne        cr5,bp
+        ori        r9,r9,0x400
+        stw        r9,0x18(r4)
+        b          unfreezegame
 
 bp:
-	rlwinm	r9,r9,0,22,20
-	stw	r9,0x18(r4)
-	beq	cr5,finish
-	beq	cr6,+8
-	addi	r12,r12,4		# lf databp r12=r12+4
+        rlwinm     r9,r9,0,22,20
+        stw        r9,0x18(r4)
+        beq        cr5,finish
+        beq        cr6,+8
+        addi       r12,r12,4                # lf databp r12=r12+4
 
-	li	r3, 4			# 4 bytes
-	bl	exireceivebuffer
+        li         r3,4                     # 4 bytes
+        bl         exireceivebuffer
 
-	ble	cr6,noalignement	# lf not aligned data bp (0x89)
+        ble        cr6,noalignement         # lf not aligned data bp (0x89)
 
-	addi	r12,r12,4
+        addi       r12,r12,4
 
-	li	r3, 4			# 4 bytes
-        bl	exireceivebuffer
+        li         r3,4                     # 4 bytes
+        bl         exireceivebuffer
 
 noalignement:
-	ori	r4, r31, bpbuffer@l	# read buffer just store in lowmem
+        ori        r4,r31,bpbuffer@l        # read buffer just store in lowmem
 
-        lwz	r3, 0(r4)
-        lwz	r4, 4(r4)
-        mtspr	1010, r3		# set IABR
-	mtspr	1013, r4		# set DABR
-	b	finish
+        lwz        r3,0(r4)
+        lwz        r4,4(r4)
+        mtspr      1010,r3                  # set IABR
+        mtspr      1013,r4                  # set DABR
+        b          finish
 
 #***************************************************************************
 #                        subroutine: bphandler
@@ -245,7 +240,7 @@ noalignement:
 
 bphandler:
 	mtsprg	2,r1			# sprg2 = r1
-	mfsrr0	r1			# r1=srr0		
+	mfsrr0	r1			# r1=srr0
 	mtsprg	3,r3			# sprg3 = r3
 	mfsrr1	r3
 			# r3=srr1
@@ -255,7 +250,7 @@ bphandler:
 	ori	r3,r3,0x2000
 #	rlwinm	r3,r3,0,17,15		# clear hw interrupt
 	mtsrr1	r3			# restore srr1 with hw interrupt & trace cleared
-	
+
 	lis	r3,break@h
 	ori	r3,r3,break@l
 	mtsrr0	r3
@@ -289,7 +284,7 @@ break:
 
         mfdsisr	r3
         stw	r3, 0xC(r4)		# Store DSISR
-       
+
         mfdar	r3
         stw	r3, 0x10(r4)		# Store DAR
 
@@ -343,7 +338,7 @@ skip_floating_point:
 
 	add	r9,r16,r17
 	stw	r9,12(r5)
-	
+
 
 _alignementcheck:
 	lwz	r16,8(r5)
@@ -414,8 +409,8 @@ _skipbp:
 #***************************************************************************
 
 unfreezegame:
-	stw	r21, 0(r18)
-	b	resumegame
+        stw        r21,0(r18)
+        b          resumegame
 
 #***************************************************************************
 #                        subroutine: write dword:
@@ -423,25 +418,25 @@ unfreezegame:
 #***************************************************************************
 
 writedword:
-	cmpwi	cr5,r29,2
-	li	r3, 8			# 8 bytes (location 4 / Value 4)
+        cmpwi      cr5,r29,2
+        li         r3, 8                    # 8 bytes (location 4 / Value 4)
 
-	ori	r12, r31, dwordbuffer@l	# buffer
-	bl	exireceivebuffer
+        ori        r12,r31,dwordbuffer@l    # buffer
+        bl         exireceivebuffer
 
-        lwz	r5, 0(r12)
-        lwz	r3, 4(r12)		# read the value	
-        stb	r3, 0(r5)		# write to location
-	blt	cr5,skipp
-        sth	r3, 0(r5)		# write to location
-	beq	cr5,skipp
-        stw	r3, 0(r5)		# write to location
-	skipp:
-        dcbf    r0, r5                # data cache block flush
-	sync
-        icbi    r0, r5
-	isync
-        b	finish
+        lwz        r5,0(r12)
+        lwz        r3,4(r12)                # read the value
+        stb        r3,0(r5)                 # write to location
+        blt        cr5,skipp
+        sth        r3,0(r5)                 # write to location
+        beq        cr5,skipp
+        stw        r3,0(r5)                 # write to location
+skipp:
+        dcbf       r0,r5                    # data cache block flush
+        sync
+        icbi       r0,r5
+        isync
+        b          finish
 
 #***************************************************************************
 #                        subroutine: SendCheats :
@@ -474,11 +469,11 @@ uploadcode:
 	ori	r12, r31, dwordbuffer@l	# buffer
 
 	bl	exireceivebuffer
-          
+
 	lwz	r16, 4(r12)
 	lwz	r12, 0(r12)
 
-upload:	
+upload:
 	ori	r27, r31, rem@l		# Remainder of bytes upload code
 	li	r17,0xF80
 	bl	_packetdivide
@@ -493,7 +488,7 @@ uploadwait:
 	beq	uploadwait
 	add	r12,r12,r14
 
-	subic.	r11, r11, 1		# decrease loop counter     
+	subic.	r11, r11, 1		# decrease loop counter
 	bgt	nextrecpacket
 
 douploadremainder:			# send the remainder bytes
@@ -515,60 +510,60 @@ finishupload:
 #***************************************************************************
 
 exireceivebyte:
-	mflr	r30
-        lis	r3, 0xA000		# EXI read command
+        mflr       r30
+        lis        r3,0xA000                # EXI read command
 
-	bl checkexisend
+        bl         checkexisend
 
-	andis.	r3, r16, 0x800
-	rlwinm	r29,r16,16,24,31
-	mtlr	r30
-	blr
+        andis.     r3,r16,0x800
+        rlwinm     r29,r16,16,24,31
+        mtlr       r30
+        blr
 
 #***************************************************************************
 #                        subroutine: checkexisend:
-#  
+#
 #***************************************************************************
 
 checkexisend:
 
-	stw	r23, 0x6814(r24)		# 32mhz Port B
-	stw	r3, 0x6824(r24)
-	stw	r22, 0x6820(r24)          # 0xCC006820 (Channel 1 Control Register)
+        stw        r23,0x6814(r24)          # 32mhz Port B
+        stw        r3,0x6824(r24)
+        stw        r22,0x6820(r24)          # 0xCC006820 (Channel 1 Control Register)
 
-exicheckreceivewait:                
- 	lwz	r5, 0x6820(r24)
-	andi.	r5, r5, 1
-	bne	exicheckreceivewait	# while((exi_chan1cr)&1);
+exicheckreceivewait:
+        lwz        r5,0x6820(r24)
+        andi.      r5,r5,1
+        bne        exicheckreceivewait      # while((exi_chan1cr)&1);
 
-	lwz	r16, 0x6824(r24)
-	stw	r5, 0x6814(r24)
+        lwz        r16,0x6824(r24)
+        stw        r5,0x6814(r24)
 
-	blr
+        blr
 
 #***************************************************************************
 #                        subroutine: exireceivebuffer:
-#  r3 byte counter, r12 points to buffer, r3 gets copied as gets destroyed  
+#  r3 byte counter, r12 points to buffer, r3 gets copied as gets destroyed
 #***************************************************************************
 
 exireceivebuffer:
-	mflr	r10			# save link register
-	mtctr	r3			# counter
-	li	r14,0
+        mflr       r10                      # save link register
+        mtctr      r3                       # counter
+        li         r14,0
 
 bufferloop:
-	bl	exicheckreceive
-	bl	exicheckreceive
-	bl	exireceivebyte   
-	beq	bufferloop		# r3 returns 1 or 0, one for byte received ok
+        bl        exicheckreceive
+        bl        exicheckreceive
+        bl        exireceivebyte
+        beq       bufferloop                # r3 returns 1 or 0, one for byte received ok
 
-	stbx	r29, r14,r12        	# store byte into buffer
+        stbx      r29,r14,r12               # store byte into buffer
 
-	addi	r14, r14, 1        	# increase buffer by 1
-	bdnz	bufferloop
+        addi      r14,r14,1                 # increase buffer by 1
+        bdnz      bufferloop
 
-	mtlr	r10			# retore link register
-	blr				# return to command check
+        mtlr      r10                       # restore link register
+        blr                                 # return to command check
 
 #***************************************************************************
 #                        exisendbuffer:
@@ -582,7 +577,7 @@ exisendbuffer:
 
 sendloop:
 	lbzx	r3, r12,r14
-	bl	exisendbyte   
+	bl	exisendbyte
 	beq	sendloop
 
 	addi	r14, r14, 1		# increase buffer
@@ -617,17 +612,17 @@ exisendbyte:				# r3, send value
 #***************************************************************************
 
 exicheckreceive:
-	mflr	r30
+        mflr       r30
 exicheckreceive2:
-	lis	r3, 0xD000		# EXI check status command
+        lis        r3,0xD000                # EXI check status command
 
-	bl checkexisend
+        bl         checkexisend
 
-	rlwinm.	r3,r16,6,31,31		# returns either 0 or 1 for r3
+        rlwinm.    r3,r16,6,31,31           # returns either 0 or 1 for r3
 
-	beq     exicheckreceive2
-	mtlr	r30
-	blr
+        beq        exicheckreceive2
+        mtlr       r30
+        blr
 
 #***************************************************************************
 #                Readmem: (reads a memory range back to PC)
@@ -646,7 +641,7 @@ readmem:
 	lwz	r12, 0(r12)
 
 	ori	r27, r31, rem@l		# place holder for remainder bytes
-        
+
 	ori	r17, r21, 0xF800		# 64K packet
 	sub	r16, r5, r12		# memrange = (*endlocation - *startlocation)
 
@@ -702,45 +697,45 @@ versionnumber:
 	#b	finish
 
 #***************************************************************************
-#                Finish
-#                Check lf the gecko has been paused. lf no return to game
+#                            Finish
+# Check lf the gecko has been paused. lf no return to game
 #***************************************************************************
 
 finish:
-	lwz	r4, 0(r18)
-	cmpwi	r4, 0			# check to see lf we have frozen the game
-	bne	frozen			# loop around lf we have (changed to return for the bp)
+        lwz        r4,0(r18)
+        cmpwi      r4,0                     # check to see lf we have frozen the game
+        bne        frozen                   # loop around lf we have (changed to return for the bp)
 
 resumegame:
 
-    sth r28,0x4010(r20) # restore memory protection value
+        sth        r28,0x4010(r20)          # restore memory protection value
 
-	lfd	f2,152(r1)		# loads f2
-	lfd	f3,160(r1)		# loads f3
+        lfd        f2,152(r1)               # loads f2
+        lfd        f3,160(r1)               # loads f3
 
-	mfmsr	r25
+        mfmsr      r25
 
-	lwz	r0,172(r1)
-	mtlr	r0			# restores lr
+        lwz        r0,172(r1)
+        mtlr       r0                       # restores lr
 
-	lwz	r0,12(r1)
-	mtcr	r0			# restores cr
+        lwz        r0,12(r1)
+        mtcr       r0                       # restores cr
 
-	lwz	r0,16(r1)
-	mtctr	r0			# restores ctr
+        lwz        r0,16(r1)
+        mtctr      r0                       # restores ctr
 
-	lwz	r0,20(r1)
-	mtxer	r0			# restores xer
+        lwz        r0,20(r1)
+        mtxer      r0                       # restores xer
 
-	lmw	r3,24(r1)		# restores r3-r31
+        lmw        r3,24(r1)                # restores r3-r31
 
-	lwz	r0,8(r1)		# loads r0
+        lwz        r0,8(r1)                 # loads r0
 
-	addi	r1,r1,168
+        addi       r1,r1,168
 
-	isync
+        isync
 
-        blr				# return back to game
+        blr                                 # return back to game
 
 #***************************************************************************
 #                        Write branch
@@ -753,7 +748,7 @@ writebranch:
 	lis	r5, 0x4800		# 0x48000000
 	rlwimi	r5,r17,0,6,29
 	stw	r5, 0(r3)		# result in r3
-	
+
         dcbf    r0, r3                # data cache block flush
 	sync
         icbi    r0, r3
@@ -777,31 +772,31 @@ _packetdivide:
 #================================================================================
 
 _codehandler:
-	mflr	r29
-	lis r15, codelist@h
-	ori	r15, r15, codelist@l
+        mflr       r29
+        lis        r15,codelist@h
+        ori        r15,r15,codelist@l
 
-	ori	r7, 31, cheatdata@l	# set pointer for storing data (before the codelist)
+        ori        r7,31,cheatdata@l        # set pointer for storing data (before the codelist)
 
-	lis	r6,0x8000		# default base address = 0x80000000 (code handler)
+        lis        r6,0x8000                # default base address = 0x80000000 (code handler)
 
-	mr	r16,r6			# default pointer =0x80000000 (code handler)
+        mr         r16,r6                   # default pointer =0x80000000 (code handler)
 
-	li	r8,0			# code execution status set to true (code handler)
+        li         r8,0                     # code execution status set to true (code handler)
 
-	lis	r3,0x00D0
-        ori	r3,r3,0xC0DE
+        lis        r3,0x00D0
+        ori        r3,r3,0xC0DE
 
-	lwz	r4,0(r15)
-	cmpw	r3,r4
-	bne-	_exitcodehandler
-	lwz	r4,4(r15)
-	cmpw	r3,r4
-        bne-	_exitcodehandler	# lf no code list skip code handler
-        addi	r15,r15,8
-	b	_readcodes
+        lwz        r4,0(r15)
+        cmpw       r3,r4
+        bne-       _exitcodehandler
+        lwz        r4,4(r15)
+        cmpw       r3,r4
+        bne-       _exitcodehandler        # lf no code list skip code handler
+        addi       r15,r15,8
+        b          _readcodes
 _exitcodehandler:
-	mtlr	r29
+        mtlr       r29
         blr
 
 
@@ -849,7 +844,7 @@ _readcodes:
 
 	cmpwi	r10,7
 	blt+	_hook_execute		#Code type 6 : hook, execute code
-	
+
 	b	_terminator_onoff_	#code type 7 : End of code list
 
 #CT0=============================================================================
@@ -919,7 +914,7 @@ _loop_serial:
 	cmpwi	cr5,r5,1
 	beq-	cr5,+16			#lf 16bits
 	bgt+	cr5,+20			#lf 32bits
-	
+
 	stbx	r4,r9,r12		#write serial byte (CT04,T=0)
 	b	+16
 
@@ -1055,7 +1050,7 @@ _ba_pointer:
 
 	cmpwi	cr4,r5,4		#cr4 = compare sub code type with 4 (ba/po)
 	andi.	r14,r5,3		#r14 = sub code type and 3
-	
+
 	cmpwi	cr5,r14,2		#compares sub code type and 2
 
 	blt-	cr5,_p01
@@ -1075,11 +1070,11 @@ _p01:
 	add	r4,r4,r9		#flag is set (=1), address = XXXXXXXX+rN
 
 	beq	cr3,+8			#(Y) flag is not set(=0), address = XXXXXXXX (+rN)
- 
+
   	add	r4,r12,r4		#address = XXXXXXXX (+rN) + (ba/po)
 
 
-	cmpwi	cr5,r14,1			
+	cmpwi	cr5,r14,1
 	beq	cr5,+8			#address = (ba/po)+XXXXXXXX(+rN)
 	lwz	r4,0(r4)		#address = [(ba/po)+XXXXXXXX(+rN)]
 
@@ -1089,8 +1084,8 @@ _p01:
 	add	r4,r4,r6		#ba += XXXXXXXX (+rN) + (ba/po)
 	b	_pend
 	add	r4,r4,r16		#po += XXXXXXXX (+rN) + (ba/po)
-	b	_pend		
-	
+	b	_pend
+
 
 
 _p2:
@@ -1112,7 +1107,7 @@ _pend:
 	mr	r6,r4			#store result to base address
 	b	_readcodes
 	mr	r16,r4			#store result to pointer
-	b	_readcodes	
+	b	_readcodes
 
 
 #CT3============================================================================
@@ -1267,10 +1262,10 @@ _storeloopend:
 	b	_readcodes
 
 
-_op0:	
+_op0:
 	rlwinm.	r5,r3,16,31,31		#+(ba/po) flag : Y
 	beq	+8			#value = XXXXXXXX
-	add	r4,r4,r12		#value = XXXXXXXX+(ba/po)	
+	add	r4,r4,r12		#value = XXXXXXXX+(ba/po)
 
 
 
@@ -1302,13 +1297,13 @@ _op34:	#operation 1 & 2
 
 	andi.	r11,r10,1		#lf [] for 1st value
 	beq	+8
-	mr	r26,r4			
+	mr	r26,r4
 
 
 	andi.	r11,r10,2		#lf [] for 2nd value
 	beq	+16
 	mr	r19,r9
-	bne+	cr4,+8	
+	bne+	cr4,+8
 	add	r19,r12,r19		#lf CT3, 2nd value address = XXXXXXXX+(ba/op)
 
 
@@ -1397,7 +1392,7 @@ _operation_bl_return:
 #copy1        (5) : 8AYYYYNM XXXXXXXX = copy YYYY bytes from [rN] to ([rM]+)XXXXXXXX
 #copy2        (6) : 8CYYYYNM XXXXXXXX = copy YYYY bytes from ([rN]+)XXXXXX to [rM]
 
-_op56:				
+_op56:
 
 	bne-	cr7,_readcodes		#lf code execution set to false skip code
 
@@ -1405,7 +1400,7 @@ _op56:
 	mr	r14,r12			#r14=(ba/po)
 	bl	_load_NM
 
-	beq-	cr4,+12   
+	beq-	cr4,+12
 	add	r17,r17,r4		#lf sub code type==0 then source+=XXXXXXXX
 	b	+8
 	add	r9,r9,r4		#lf sub code type==1 then destination+=XXXXXXXX
@@ -1420,13 +1415,13 @@ _op56:
 	addi	r5,r5,1
 	cmpw	r5,r4
 	b 	_copy_loop
-	
+
 
 
 #===============================================================================
 #This is a routine called by _memory_copy and _compare_NM_16
 
-_load_NM:				
+_load_NM:
 
 	cmpwi	cr5,r10,4		#compare code type and 4(rn Operations) in cr5
 
@@ -1510,7 +1505,7 @@ _skip_and_align:
 
 
 _hook_addresscheck:
-	
+
 	cmpwi	cr4,r5,3
 	bgt-	cr4,_addresscheck1	#lf sub code type ==6 or 7
 	lis	r5,0x4800
@@ -1584,7 +1579,7 @@ _onoff:
 
 _onoff_end:
 	rlwimi	r8,r26,0,31,31		#current execution status = a
-	
+
 	b _readcodes
 
 #===============================================================================
@@ -1717,7 +1712,7 @@ _load_baseaddress:
 	b	_readcodes
 
 #===============================================================================
-       
+
 frozenvalue:	#frozen value, then LR
 .long        0,0
 dwordbuffer:
@@ -1738,5 +1733,3 @@ regbuffer:
 codelist:
 .space 2*4
 .end
-
-
